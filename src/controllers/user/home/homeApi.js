@@ -4,7 +4,7 @@ const Course = require("../../../models/course");
 exports.homeApi = async (req, res, next) => {
   try {
     const userExam = req.user.exam;
-    const [banner, recommendedCourse, freeCourse, paidCourse] =
+    const [banner, recommendedCourse, popularCourse, paidCourse] =
       await Promise.all([
         Banner.find(),
         Course.find({
@@ -12,9 +12,11 @@ exports.homeApi = async (req, res, next) => {
         }).select(
           "name price duration rating ratingNumber thumbImage lesson logo"
         ),
-        Course.find({ isPremium: false }).select(
-          "name price duration rating ratingNumber thumbImage lesson logo"
-        ),
+        Course.find()
+          .select(
+            "name price duration rating ratingNumber thumbImage lesson logo"
+          )
+          .sort({ purchaseNumber: -1 }),
         Course.find({ isPremium: true })
           .select(
             "name price duration rating ratingNumber thumbImage lesson logo"
@@ -28,7 +30,7 @@ exports.homeApi = async (req, res, next) => {
       data: {
         banner,
         recommendedCourse,
-        freeCourse,
+        popularCourse,
         paidCourse,
       },
     });

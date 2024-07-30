@@ -128,11 +128,6 @@ exports.createTransaction = async (req, res, next) => {
       });
 
       await newCheckout.save();
-      if (onModel === "Course") {
-        const course = await Course.findById(item);
-        course.purchasedNumber = course.purchasedNumber + 1;
-        await course.save();
-      }
     } else {
       const orderId = generateOrderId();
       newCheckout = new Transaction({

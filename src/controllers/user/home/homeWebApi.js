@@ -10,7 +10,7 @@ exports.homeWebApi = async (req, res, next) => {
       const user = await User.findById(userId);
       userExam = user.exam;
     }
-    const [banner, recommendedCourse, freeCourse, paidCourse] =
+    const [banner, recommendedCourse, popularCourse, paidCourse] =
       await Promise.all([
         Banner.find(),
         Course.find({
@@ -18,12 +18,16 @@ exports.homeWebApi = async (req, res, next) => {
         }).select(
           "name price duration rating ratingNumber thumbImage lesson logo slug"
         ),
-        Course.find({ isPremium: false }).select(
-          "name price duration rating ratingNumber thumbImage lesson logo slug"
-        ),
-        Course.find({ isPremium: true }).select(
-          "name price duration rating ratingNumber thumbImage lesson logo slug"
-        ).sort({ createdAt: -1 }),
+        Course.find()
+          .sort({ purchaseNumber: -1 })
+          .select(
+            "name price duration rating ratingNumber thumbImage lesson logo slug"
+          ),
+        Course.find({ isPremium: true })
+          .select(
+            "name price duration rating ratingNumber thumbImage lesson logo slug"
+          )
+          .sort({ createdAt: -1 }),
       ]);
 
     res.status(200).json({
@@ -32,7 +36,7 @@ exports.homeWebApi = async (req, res, next) => {
       data: {
         banner,
         recommendedCourse,
-        freeCourse,
+        popularCourse,
         paidCourse,
       },
     });
