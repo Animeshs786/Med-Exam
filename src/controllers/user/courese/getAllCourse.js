@@ -18,11 +18,19 @@ exports.getAllCourse = catchAsync(async (req, res) => {
   if (type === "Premium") {
     filter.isPremium = true;
   }
-  if (type === "Free") {
-    filter.isPremium = false;
-  }
 
-  const courses = await Course.find(filter).select("name price duration rating ratingNumber thumbImage lesson logo slug");
+  let courses;
+  if (type === "Popular") {
+    courses = await Course.find(filter)
+      .select(
+        "name price duration rating ratingNumber thumbImage lesson logo slug"
+      )
+      .sort({ purchaseNumber: -1 });
+  } else {
+    await Course.find(filter).select(
+      "name price duration rating ratingNumber thumbImage lesson logo slug"
+    );
+  }
 
   const coursePromises = courses.map(async (course) => {
     const transaction = await Transaction.findOne({

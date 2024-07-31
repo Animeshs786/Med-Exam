@@ -70,6 +70,10 @@ const courseSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    bannerImage: {
+      type: String,
+      default: "",
+    },
     logo: {
       type: String,
       default: "",

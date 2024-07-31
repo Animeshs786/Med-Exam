@@ -5,12 +5,16 @@ const deleteOldFiles = require("../../../utils/deleteOldFiles");
 
 exports.createCourse = catchAsync(async (req, res, next) => {
   let thumbImage;
+  let bannerImage;
   let pdf;
   let logo;
   let previewBanner = [];
 
   if (req.files?.thumbImage) {
     thumbImage = `${req.files.thumbImage[0].destination}/${req.files.thumbImage[0].filename}`;
+  }
+  if (req.files?.bannerImage) {
+    bannerImage = `${req.files.bannerImage[0].destination}/${req.files.bannerImage[0].filename}`;
   }
   if (req.files?.logo) {
     logo = `${req.files.logo[0].destination}/${req.files.logo[0].filename}`;

@@ -6,12 +6,16 @@ const deleteOldFiles = require("../../../utils/deleteOldFiles");
 exports.updateCourse = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   let newThumbImage;
+  let newBannerImage;
   let newPdf;
   let newLogo;
   let newPreviewBanner = [];
 
   if (req.files?.thumbImage) {
     newThumbImage = `${req.files.thumbImage[0].destination}/${req.files.thumbImage[0].filename}`;
+  }
+  if (req.files?.bannerImage) {
+    newBannerImage = `${req.files.bannerImage[0].destination}/${req.files.bannerImage[0].filename}`;
   }
   if (req.files?.logo) {
     newLogo = `${req.files.logo[0].destination}/${req.files.logo[0].filename}`;
@@ -65,6 +69,7 @@ exports.updateCourse = catchAsync(async (req, res, next) => {
     const existingCourse = await Course.findById(id);
     if (!existingCourse) {
       if (newThumbImage) await deleteOldFiles(newThumbImage);
+      if (newBannerImage) await deleteOldFiles(newBannerImage);
       if (newPdf) await deleteOldFiles(newPdf);
       if (newLogo) await deleteOldFiles(newLogo);
       if (newPreviewBanner.length > 0) {
@@ -78,6 +83,10 @@ exports.updateCourse = catchAsync(async (req, res, next) => {
     if (newThumbImage && existingCourse.thumbImage) {
       await deleteOldFiles(existingCourse.thumbImage);
       courseData.thumbImage = newThumbImage;
+    }
+    if (newBannerImage && existingCourse.bannerImage) {
+      await deleteOldFiles(existingCourse.bannerImage);
+      courseData.bannerImage = newBannerImage;
     }
     if (newPdf && existingCourse.pdf) {
       await deleteOldFiles(existingCourse.pdf);
