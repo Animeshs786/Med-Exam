@@ -82,6 +82,9 @@ exports.createCourse = catchAsync(async (req, res, next) => {
     if (thumbImage) {
       courseData.thumbImage = thumbImage;
     }
+    if (bannerImage) {
+      courseData.bannerImage = bannerImage;
+    }
 
     if (pdf) {
       courseData.pdf = pdf;
