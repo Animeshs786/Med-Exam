@@ -19,9 +19,7 @@ exports.getAllCourse = catchAsync(async (req, res) => {
     filter.isPremium = false;
   }
 
-  const courses = await Course.find(filter).populate(
-    "classes"
-  );
+  const courses = await Course.find(filter);
 
   res.status(200).json({
     status: true,

@@ -28,7 +28,6 @@ exports.updateCourse = catchAsync(async (req, res, next) => {
       newPreviewBanner.push(`${file.destination}/${file.filename}`);
     });
   }
-
   try {
     const {
       name,
@@ -86,6 +85,8 @@ exports.updateCourse = catchAsync(async (req, res, next) => {
     }
     if (newBannerImage && existingCourse.bannerImage) {
       await deleteOldFiles(existingCourse.bannerImage);
+    }
+    if (newBannerImage) {
       courseData.bannerImage = newBannerImage;
     }
     if (newPdf && existingCourse.pdf) {

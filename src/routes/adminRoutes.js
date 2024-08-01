@@ -266,6 +266,7 @@ router
     fileUploader(
       [
         { name: "thumbImage", maxCount: 1 },
+        { name: "bannerImage", maxCount: 1 },
         { name: "logo", maxCount: 1 },
         { name: "previewBanner", maxCount: 3 },
         { name: "pdf", maxCount: 1 },
@@ -282,6 +283,7 @@ router
     fileUploader(
       [
         { name: "thumbImage", maxCount: 1 },
+        { name: "bannerImage", maxCount: 1 },
         { name: "logo", maxCount: 1 },
         { name: "coursePreview", maxCount: 1 },
         { name: "pdf", maxCount: 1 },

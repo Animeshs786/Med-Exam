@@ -23,16 +23,16 @@ exports.getAllCourse = catchAsync(async (req, res) => {
   if (type === "Popular") {
     courses = await Course.find(filter)
       .select(
-        "name price duration rating ratingNumber thumbImage lesson logo slug"
+        "name price duration rating ratingNumber thumbImage lesson logo slug subHeading"
       )
       .sort({ purchaseNumber: -1 });
   } else {
-    await Course.find(filter).select(
-      "name price duration rating ratingNumber thumbImage lesson logo slug"
+    courses = await Course.find(filter).select(
+      "name price duration rating ratingNumber thumbImage lesson logo slug subHeading"
     );
   }
 
-  const coursePromises = courses.map(async (course) => {
+  const coursePromises = courses?.map(async (course) => {
     const transaction = await Transaction.findOne({
       user: userId,
       item: course._id,
