@@ -38,7 +38,7 @@ exports.getAllMyPurchases = catchAsync(async (req, res) => {
     console.log("here");
     const transactions = await Transaction.find(transactionsQuery).populate(
       "item",
-      "name thumbImage logo"
+      "name thumbImage logo rating subHeading"
     );
 
     for (const transaction of transactions) {

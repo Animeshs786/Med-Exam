@@ -197,6 +197,7 @@ const {
 const {
   importQuestionsFromDoc,
 } = require("../controllers/admin/questionController/importQuestionFromDoc");
+const { importQuestionFromCsv } = require("../controllers/admin/questionController/importQuestionFromCsv");
 
 const router = express.Router();
 
@@ -245,19 +246,68 @@ router
   .delete(deleteSubject);
 
 //Paper
-router.route("/question").post(createQuestion).get(getAllQuestions);
+router
+  .route("/question")
+  .post(
+    fileUploader(
+      [
+        { name: "questionImageEnglish", maxCount: 1 },
+        { name: "solutionImageEnglish", maxCount: 1 },
+        { name: "optionImage1English", maxCount: 1 },
+        { name: "optionImage2English", maxCount: 1 },
+        { name: "optionImage3English", maxCount: 1 },
+        { name: "optionImage4English", maxCount: 1 },
+        { name: "questionImageHindi", maxCount: 1 },
+        { name: "solutionImageHindi", maxCount: 1 },
+        { name: "optionImage1Hindi", maxCount: 1 },
+        { name: "optionImage2Hindi", maxCount: 1 },
+        { name: "optionImage3Hindi", maxCount: 1 },
+        { name: "optionImage4Hindi", maxCount: 1 },
+      ],
+      "question"
+    ),
+    createQuestion
+  )
+  .get(getAllQuestions);
+
 router
   .route("/question/:id")
   .get(getQuestion)
-  .patch(updateQuestion)
+  .patch(
+    fileUploader(
+      [
+        { name: "questionImageEnglish", maxCount: 1 },
+        { name: "solutionImageEnglish", maxCount: 1 },
+        { name: "optionImage1English", maxCount: 1 },
+        { name: "optionImage2English", maxCount: 1 },
+        { name: "optionImage3English", maxCount: 1 },
+        { name: "optionImage4English", maxCount: 1 },
+        { name: "questionImageHindi", maxCount: 1 },
+        { name: "solutionImageHindi", maxCount: 1 },
+        { name: "optionImage1Hindi", maxCount: 1 },
+        { name: "optionImage2Hindi", maxCount: 1 },
+        { name: "optionImage3Hindi", maxCount: 1 },
+        { name: "optionImage4Hindi", maxCount: 1 },
+      ],
+      "question"
+    ),
+    updateQuestion
+  )
   .delete(deleteQuestion);
 
-router
+  router
   .route("/uploadQuestion")
   .post(
-    fileUploader([{ name: "file", maxCount: 1 }], "dock"),
-    importQuestionsFromDoc
+    fileUploader([{ name: "csvFile", maxCount: 1 }], "csv"),
+    importQuestionFromCsv
   );
+
+// router
+//   .route("/uploadQuestion")
+//   .post(
+//     fileUploader([{ name: "file", maxCount: 1 }], "dock"),
+//     importQuestionsFromDoc
+//   );
 
 //Course
 router
@@ -402,7 +452,14 @@ router.route("/home/faq/:id").get(getFaq);
 router
   .route("/testSeries")
   .post(
-    fileUploader([{ name: "thumbImage", maxCount: 1 }], "testSeries"),
+    fileUploader(
+      [
+        { name: "thumbImage", maxCount: 1 },
+        { name: "logo", maxCount: 1 },
+        { name: "bannerImage", maxCount: 1 },
+      ],
+      "testSeries"
+    ),
     createTestSeries
   )
   .get(getAllTestSeries);
@@ -411,7 +468,14 @@ router
   .route("/testSeries/:id")
   .get(getTestSeries)
   .patch(
-    fileUploader([{ name: "thumbImage", maxCount: 1 }], "testSeries"),
+    fileUploader(
+      [
+        { name: "thumbImage", maxCount: 1 },
+        { name: "logo", maxCount: 1 },
+        { name: "bannerImage", maxCount: 1 },
+      ],
+      "testSeries"
+    ),
     updateTestSeries
   )
   .delete(deleteTestSeries);
@@ -457,7 +521,7 @@ router
     fileUploader(
       [
         { name: "thumbImage", maxCount: 1 },
-        { name: "logo", maxCount: 1 },
+        { name: "bannerImage", maxCount: 1 },
       ],
       "notes"
     ),
@@ -472,7 +536,7 @@ router
     fileUploader(
       [
         { name: "thumbImage", maxCount: 1 },
-        { name: "logo", maxCount: 1 },
+        { name: "bannerImage", maxCount: 1 },
       ],
       "notes"
     ),
@@ -484,13 +548,7 @@ router
 router
   .route("/notesubjects")
   .post(
-    fileUploader(
-      [
-        { name: "thumbImage", maxCount: 1 },
-        { name: "files", maxCount: 10 },
-      ],
-      "notes"
-    ),
+    fileUploader([{ name: "files", maxCount: 10 }], "notes"),
     createNoteSubject
   )
   .get(getAllNoteSubjects);

@@ -23,14 +23,21 @@ exports.submitTest = catchAsync(async (req, res, next) => {
   let totalAttempted = 0;
 
   const answerResults = await Promise.all(
-    submittedAnswers.map(async (answer) => {
-      const question = await Question.findById(answer.question);
+    submittedAnswers.map(async (submittedAnswer) => {
+      const { question: questionId, answer, language } = submittedAnswer;
+      const question = await Question.findById(questionId);
       if (!question) {
         return null;
       }
 
-      const isCorrect = question.correctAnswer === answer.answer;
-      if (answer.answer !== null) {
+      let isCorrect = false;
+      if (language === "English") {
+        isCorrect = question.correctAnswerEnglish === answer;
+      } else if (language === "Hindi") {
+        isCorrect = question.correctAnswerHindi === answer;
+      }
+
+      if (answer !== null) {
         totalCorrect += isCorrect ? 1 : 0;
         totalIncorrect += !isCorrect ? 1 : 0;
         totalMarks += isCorrect ? correctMark : wrongMark;
@@ -39,11 +46,11 @@ exports.submitTest = catchAsync(async (req, res, next) => {
         skip += 1;
         totalAttempted += 1;
       }
-
       return {
         question: question._id,
-        answer: answer.answer,
-        bookmarked: answer.bookmarked,
+        answer,
+        language,
+        bookmarked: submittedAnswer.bookmarked,
         isCorrect,
       };
     })

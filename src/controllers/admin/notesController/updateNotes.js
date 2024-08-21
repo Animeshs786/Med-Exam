@@ -11,9 +11,9 @@ exports.updateNote = catchAsync(async (req, res, next) => {
   }
 
   let thumbImage;
-  let logo;
+  let bannerImage;
 
-  if (req.files.thumbImage) {
+  if (req.files && req.files?.thumbImage) {
     thumbImage = `${req.files.thumbImage[0].destination}/${req.files.thumbImage[0].filename}`;
     if (note.thumbImage) {
       await deleteOldFiles(note.thumbImage).catch((err) =>
@@ -21,38 +21,27 @@ exports.updateNote = catchAsync(async (req, res, next) => {
       );
     }
   }
-
-  if (req.files.logo) {
-    logo = `${req.files.logo[0].destination}/${req.files.logo[0].filename}`;
-    if (note.logo) {
-      await deleteOldFiles(note.logo).catch((err) =>
-        console.error("Failed to delete logo", err)
+  if (req.files && req.files?.bannerImage) {
+    bannerImage = `${req.files.bannerImage[0].destination}/${req.files.bannerImage[0].filename}`;
+    if (note.bannerImage) {
+      await deleteOldFiles(note.bannerImage).catch((err) =>
+        console.error("Failed to delete banner image", err)
       );
     }
   }
 
-  const {
-    name,
-    description,
-    price,
-    isPremium,
-    topNotes,
-    exam,
-    language,
-    detail,
-  } = req.body;
+  const { name, price, exam, subHeading,detail,description,course } = req.body;
   const updatedData = {};
 
   if (name) updatedData.name = name;
-  if (description) updatedData.description = description;
   if (price) updatedData.price = price;
-  if (isPremium) updatedData.isPremium = isPremium;
-  if (topNotes) updatedData.topNotes = topNotes;
   if (exam) updatedData.exam = JSON.parse(exam);
-  if (language) updatedData.language = JSON.parse(language);
   if (detail) updatedData.detail = JSON.parse(detail);
   if (thumbImage) updatedData.thumbImage = thumbImage;
-  if (logo) updatedData.logo = logo;
+  if (bannerImage) updatedData.bannerImage = bannerImage;
+  if (description) updatedData.description = description;
+  if (subHeading) updatedData.subHeading = subHeading;
+  if (course) updatedData.course = course;
 
   const updatedNote = await Note.findByIdAndUpdate(req.params.id, updatedData, {
     new: true,

@@ -19,8 +19,13 @@ const testResultSchema = new mongoose.Schema({
         required: true,
       },
       answer: {
-        type: Number,
+        type: String,
         default: null,
+      },
+      language: {
+        type: String,
+        enum:["English","Hindi"],
+        default: "English",
       },
       bookmarked: {
         type: Boolean,

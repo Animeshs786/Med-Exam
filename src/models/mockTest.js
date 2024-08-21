@@ -19,7 +19,7 @@ const mockTestSchema = new mongoose.Schema({
   },
   language: {
     type: String,
-    enum: ["Hindi", "English"],
+    enum: ["Hindi", "English","Both"],
     default: "English",
   },
   subject: {
@@ -32,35 +32,36 @@ const mockTestSchema = new mongoose.Schema({
       ref: "Subject",
     },
   ],
-  thumbImage: String,
+  thumbImage: {
+    type: String,
+    default: "",
+  },
   exam: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Exam",
+    required: true,
   },
-  price: {
-    type: Number,
-    default: 0,
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
   isPaid: {
     type: Boolean,
-    default: false,
+    default: true,
   },
-  paper: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Paper",
+  reAttempt: {
+    type: Boolean,
+    default: false,
   },
   testType: {
     type: String,
-    enum: ["Full Test", "Subject Test", "Previous Paper"],
-    default: "Full Test",
+    enum: ["Full Test", "Subject Test", "Chapter Test"],
+    required: true,
   },
   testSeries: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "TestSeries",
-  },
-  previousPaper: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "PreviousPaper",
+    required: true,
   },
   createdAt: {
     type: Date,

@@ -11,7 +11,7 @@ exports.getUserTestSeries = catchAsync(async (req, res, next) => {
 
   const testSeries = await TestSeries.aggregate([
     {
-      $match: { exam: { $in: user.exam } },
+      $match: { exam: { $in: [user.exam] } },
     },
     {
       $lookup: {
@@ -34,6 +34,12 @@ exports.getUserTestSeries = catchAsync(async (req, res, next) => {
           },
         },
       },
+    },
+    {
+      $sort: { createAt: -1 }, 
+    },
+    {
+      $limit: 1,
     },
     {
       $project: {

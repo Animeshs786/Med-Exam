@@ -6,34 +6,54 @@ const notesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    description: {
+    subHeading: {
       type: String,
       default: "",
     },
     price: {
       type: Number,
+      required: [true, "Price must be required."],
+    },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    description: {
+      type: String,
+      default: "",
+    },
+    detail: [
+      {
+        type: String,
+        default: "",
+      },
+    ],
+    ratingNumber: {
+      type: Number,
       default: 0,
     },
     isPremium: {
       type: Boolean,
-      default: false,
+      default: true,
     },
-    language: [String],
-    detail:[String],
     exam: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Exam",
       },
     ],
-    thumbImage: String,
-    topNotes: {
-      type: Boolean,
-      default: false,
-    },
-    logo: {
+    bannerImage: {
       type: String,
-      default: "",
+      required: true,
+    },
+    thumbImage: {
+      type: String,
+      required: true,
+    },
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
     },
     createdAt: {
       type: Date,

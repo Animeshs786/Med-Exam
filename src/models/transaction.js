@@ -18,7 +18,7 @@ const transactionScheama = new mongoose.Schema({
       message: " Value not supported.",
     },
   },
-  price: {
+  price: { 
     type: Number,
     default: 0,
   },
@@ -33,3 +33,5 @@ const transactionScheama = new mongoose.Schema({
 
 const Transaction = mongoose.model("Transaction", transactionScheama);
 module.exports = Transaction;
+
+//this is

@@ -1,12 +1,15 @@
 const Note = require("../../../models/notes");
 const NoteSubject = require("../../../models/notesSubject");
 const Transaction = require("../../../models/transaction");
+const AppError = require("../../../utils/AppError");
 const catchAsync = require("../../../utils/catchAsync");
 
-exports.getAllNotes = catchAsync(async (req, res) => {
-  const { search, exam, type } = req.query;
+exports.getAllNotes = catchAsync(async (req, res,next) => {
+  const { search, exam, type, course } = req.query;
   const userId = req.user._id;
-  const filter = {};
+  if(!course) return next(new AppError("Please provide a course", 400));
+
+  const filter = { course };
 
   if (search) {
     filter.name = { $regex: search, $options: "i" };
@@ -55,4 +58,3 @@ exports.getAllNotes = catchAsync(async (req, res) => {
     },
   });
 });
- 

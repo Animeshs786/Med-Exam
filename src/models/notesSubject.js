@@ -5,17 +5,28 @@ const notesSubjetSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  thumbImage: String,
-  duration: {
-    type: Number,
-    default: 0,
+  subHeading: {
+    type: String,
+    default: "",
   },
+  thumbImage: String,
   files: [String],
+  subject: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Subject",
+    requried: true,
+  },
   note: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Note",
     requried: true,
   },
+  watchBy: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,

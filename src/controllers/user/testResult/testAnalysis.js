@@ -29,15 +29,28 @@ exports.getTestAnalysis = catchAsync(async (req, res, next) => {
       sa.question._id.equals(question._id)
     );
 
+    let questionText, correctAnswer, options, solutionImage;
+
+    if (submittedAnswer && submittedAnswer.language === "Hindi") {
+      questionText = question.questionNameHindi;
+      correctAnswer = question.correctAnswerHindi;
+      options = question.optionsHindi;
+      solutionImage = question.solutionImageHindi;
+    } else {
+      questionText = question.questionNameEnglish;
+      correctAnswer = question.correctAnswerEnglish;
+      options = question.optionsEnglish;
+      solutionImage = question.solutionImageEnglish;
+    }
+
     return {
       question: {
         id: question._id,
-        text: question.question,
-        correctAnswer: question.correctAnswer,
-        options: question.options,
-        hindiQuestion: question.hindiQuestion,
-        hindiOptions: question.hindiOptions,
+        text: questionText,
+        correctAnswer: correctAnswer,
+        options: options,
         subject: question.subject,
+        solutionImage: solutionImage,
       },
       userAnswer: submittedAnswer ? submittedAnswer.answer : null,
       bookmarked: submittedAnswer ? submittedAnswer.bookmarked : false,
@@ -74,5 +87,3 @@ exports.getTestAnalysis = catchAsync(async (req, res, next) => {
     },
   });
 });
-
-

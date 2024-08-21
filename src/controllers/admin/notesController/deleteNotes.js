@@ -15,11 +15,6 @@ exports.deleteNote = catchAsync(async (req, res, next) => {
     );
   }
 
-  if (note.logo) {
-    await deleteOldFiles(note.logo).catch((err) =>
-      console.error("Failed to delete logo", err)
-    );
-  }
 
   if (note.notes.length > 0) {
     await Promise.all(

@@ -23,9 +23,10 @@ exports.getCourseClass = catchAsync(async (req, res) => {
       message: "Class not found",
     });
   }
-  
-  if(!classDetail.watchBy.includes(userId)){
-    classDetail.watchBy.push(userId)
+
+  if (!classDetail.watchBy.includes(userId)) {
+    classDetail.watchBy.push(userId);
+    await classDetail.save();
   }
 
   const isBookmarked = await Bookmark.exists({

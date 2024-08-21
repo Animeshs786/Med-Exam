@@ -16,7 +16,7 @@ const courseSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      default: 0,
+      required: [true, "Price must be required."],
     },
     isPremium: {
       type: Boolean,
