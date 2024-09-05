@@ -37,11 +37,18 @@ const questionSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Subject",
   },
-  mockTest: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "MockTest",
-    required: true,
-  },
+  mockTest: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "MockTest",
+    },
+  ],
+  preparationTest: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PreparationTest",
+    },
+  ],
   questionImageEnglish: {
     type: String,
     default: "",
@@ -50,22 +57,12 @@ const questionSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  optionImage1English: {
-    type: String,
-    default: "",
-  },
-  optionImage2English: {
-    type: String,
-    default: "",
-  },
-  optionImage3English: {
-    type: String,
-    default: "",
-  },
-  optionImage4English: {
-    type: String,
-    default: "",
-  },
+  optionImageEnglish: [
+    {
+      type: String,
+      default: "",
+    },
+  ],
   questionImageHindi: {
     type: String,
     default: "",
@@ -74,22 +71,12 @@ const questionSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  optionImage1Hindi: {
-    type: String,
-    default: "",
-  },
-  optionImage2Hindi: {
-    type: String,
-    default: "",
-  },
-  optionImage3Hindi: {
-    type: String,
-    default: "",
-  },
-  optionImage4Hindi: {
-    type: String,
-    default: "",
-  },
+  optionImageHindi: [
+    {
+      type: String,
+      default: "",
+    },
+  ],
   solutionDetailHind: {
     type: String,
     trim: true,
@@ -105,6 +92,14 @@ const questionSchema = new mongoose.Schema({
     trim: true,
     enum: ["Easy", "Medium", "Hard"],
     default: "Easy",
+  },
+  queGivenTime: {
+    type: Number,
+    default: 120,
+  },
+  showQueTime: {
+    type: Boolean,
+    default: true,
   },
   createdAt: {
     type: Date,

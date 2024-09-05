@@ -23,12 +23,12 @@ exports.getAllCourse = catchAsync(async (req, res) => {
   if (type === "Popular") {
     courses = await Course.find(filter)
       .select(
-        "name price duration rating ratingNumber thumbImage lesson logo slug subHeading"
+        "name price duration rating ratingNumber thumbImage lesson logo slug subHeading bannerImage"
       )
       .sort({ purchaseNumber: -1 });
   } else {
     courses = await Course.find(filter).select(
-      "name price duration rating ratingNumber thumbImage lesson logo slug subHeading"
+      "name price duration rating ratingNumber thumbImage lesson logo slug subHeading bannerImage"
     );
   }
 

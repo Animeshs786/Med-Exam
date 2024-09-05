@@ -197,7 +197,40 @@ const {
 const {
   importQuestionsFromDoc,
 } = require("../controllers/admin/questionController/importQuestionFromDoc");
-const { importQuestionFromCsv } = require("../controllers/admin/questionController/importQuestionFromCsv");
+const {
+  importQuestionFromCsv,
+} = require("../controllers/admin/questionController/importQuestionFromCsv");
+const { getAllFaq } = require("../controllers/admin/homeController/getAllFaq");
+const {
+  addUpdateSupportMail,
+} = require("../controllers/admin/homeController/addUpdateSupportMail");
+const {
+  cloneMockTest,
+} = require("../controllers/admin/mockTestController/cloneMockTest");
+const { deleteCourse } = require("../controllers/admin/courese/deleteCourse");
+const { create } = require("../models/admin");
+const {
+  createPreparationTest,
+} = require("../controllers/admin/preparationTestController/createPreparationTest");
+const {
+  getAllPreparationTest,
+} = require("../controllers/admin/preparationTestController/getAllPreparationTest");
+const {
+  getPreparationTest,
+} = require("../controllers/admin/preparationTestController/getPreparationTest");
+const {
+  updatePreparationTest,
+} = require("../controllers/admin/preparationTestController/updatePreparationTest");
+const {
+  deletePreparationTest,
+} = require("../controllers/admin/preparationTestController/deletePreparationTest");
+const {
+  addPreparationTestQuestions,
+} = require("../controllers/admin/preparationTestController/addPreparationTestQuestions");
+const {
+  removeQuestionFromPreparationTest,
+} = require("../controllers/admin/preparationTestController/removeQuestionFromPreparationTest");
+const { clonePreparationTest } = require("../controllers/admin/preparationTestController/clonePreparationTest");
 
 const router = express.Router();
 
@@ -295,7 +328,7 @@ router
   )
   .delete(deleteQuestion);
 
-  router
+router
   .route("/uploadQuestion")
   .post(
     fileUploader([{ name: "csvFile", maxCount: 1 }], "csv"),
@@ -335,13 +368,14 @@ router
         { name: "thumbImage", maxCount: 1 },
         { name: "bannerImage", maxCount: 1 },
         { name: "logo", maxCount: 1 },
-        { name: "coursePreview", maxCount: 1 },
+        { name: "previewBanner", maxCount: 3 },
         { name: "pdf", maxCount: 1 },
       ],
       "course"
     ),
     updateCourse
-  );
+  )
+  .delete(deleteCourse);
 
 //class
 router
@@ -442,11 +476,43 @@ router
   .route("/mockTestQuestion")
   .post(addQuestionToMockTest)
   .delete(removeQuestionFromMockTest);
+router.post("/mockTestClone", cloneMockTest);
+
+//Preparation Test
+router
+  .route("/preparationTest")
+  .post(
+    fileUploader([{ name: "thumbImage", maxCount: 1 }], "preparationTest"),
+    createPreparationTest
+  )
+  .get(getAllPreparationTest);
+
+router
+  .route("/preparationTest/:id")
+  .get(getPreparationTest)
+  .patch(
+    fileUploader([{ name: "thumbImage", maxCount: 1 }], "preparationTest"),
+    updatePreparationTest
+  )
+  .delete(deletePreparationTest);
+
+router
+  .route("/preparationTestQuestion")
+  .post(addPreparationTestQuestions)
+  .delete(removeQuestionFromPreparationTest);
+
+router.post("/preparationTestClone", clonePreparationTest);
 
 //Home
 router.route("/home").post(homeController).get(getHome);
-router.route("/home/faq").post(addFaq).patch(updateFaq).delete(deleteFaq);
+router
+  .route("/home/faq")
+  .post(addFaq)
+  .patch(updateFaq)
+  .get(getAllFaq)
+  .delete(deleteFaq);
 router.route("/home/faq/:id").get(getFaq);
+router.route("/home/support").post(addUpdateSupportMail);
 
 //Test Series
 router

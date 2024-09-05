@@ -1,8 +1,8 @@
-const MockTest = require("../../../models/mockTest");
+const PreparationTest = require("../../../models/preparationTest");
 const AppError = require("../../../utils/AppError");
 const catchAsync = require("../../../utils/catchAsync");
 
-exports.createMockTest = catchAsync(async (req, res, next) => {
+exports.createPreparationTest = catchAsync(async (req, res, next) => {
   const {
     name,
     instructions,
@@ -15,18 +15,14 @@ exports.createMockTest = catchAsync(async (req, res, next) => {
     subject,
     subjects,
     exam,
-    price,
-    isPaid,
     testType,
-    testSeries,
-    reAttempt,
+    course,
   } = req.body;
 
   let thumbImage;
 
   if (!testType) return next(new AppError("Please select test type", 400));
-
-  if (!testSeries) return next(new AppError("Please select test series", 400));
+  if (!course) return next(new AppError("Please select course", 400));
 
   if (testType == "Full Test") {
     if (subject)
@@ -55,7 +51,7 @@ exports.createMockTest = catchAsync(async (req, res, next) => {
     thumbImage = `${req.files.thumbImage[0].destination}/${req.files.thumbImage[0].filename}`;
   }
 
-  const mockTest = await MockTest.create({
+  const preparationTest = await PreparationTest.create({
     name,
     instructions: instructions ? JSON.parse(instructions) : [],
     totalQuestions,
@@ -69,18 +65,15 @@ exports.createMockTest = catchAsync(async (req, res, next) => {
       testType == "Full Test" ? (subjects ? JSON.parse(subjects) : []) : [],
     thumbImage,
     exam,
-    price,
-    isPaid: price > 0 ? true : false,
     testType,
-    testSeries,
-    reAttempt,
+    course,
   });
 
   res.status(201).json({
     status: true,
-    message: "MockTest created successfully",
+    message: "Preparation test created successfully",
     data: {
-      mockTest,
+      preparationTest,
     },
   });
 });

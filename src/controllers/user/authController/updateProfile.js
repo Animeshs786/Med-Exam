@@ -25,14 +25,14 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
   if (email) {
     const user = await User.findOne({ email: email, _id: { $ne: id } });
     if (user) {
-      return next(new AppError("Phone Number already exists", 400));
+      return next(new AppError("Email already exists", 400));
     }
   }
 
   if (mobile) {
     const user = await User.findOne({ mobile: mobile, _id: { $ne: id } });
     if (user) {
-      return next(new AppError("Email already exists", 400));
+      return next(new AppError("Mobile number already exists", 400));
     }
   }
 

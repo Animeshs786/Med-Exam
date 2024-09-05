@@ -12,13 +12,12 @@ exports.createNote = catchAsync(async (req, res,next) => {
     bannerImage = `${req.files.bannerImage[0].destination}/${req.files.bannerImage[0].filename}`;
   }
 
-  const { name, price, exam, subHeading, detail, description,course } = req.body;
+  const { name, exam, subHeading, detail, description,course } = req.body;
 
   if(!course) return next(new AppError("Course id is required",400))
 
   const noteData = {
     name,
-    price,
     subHeading,
     thumbImage,
     description,

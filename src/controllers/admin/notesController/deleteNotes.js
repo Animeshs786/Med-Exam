@@ -15,8 +15,7 @@ exports.deleteNote = catchAsync(async (req, res, next) => {
     );
   }
 
-
-  if (note.notes.length > 0) {
+  if (note.notes?.length > 0) {
     await Promise.all(
       note.notes.map((filePath) =>
         deleteOldFiles(filePath).catch((err) =>

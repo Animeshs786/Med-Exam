@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const mockTestSchema = new mongoose.Schema({
+const preparationTestSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -19,7 +19,7 @@ const mockTestSchema = new mongoose.Schema({
   },
   language: {
     type: String,
-    enum: ["Hindi", "English","Both"],
+    enum: ["Hindi", "English", "Both"],
     default: "English",
   },
   subject: {
@@ -41,26 +41,14 @@ const mockTestSchema = new mongoose.Schema({
     ref: "Exam",
     required: true,
   },
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-  isPaid: {
-    type: Boolean,
-    default: true,
-  },
-  reAttempt: {
-    type: Boolean,
-    default: false,
-  },
   testType: {
     type: String,
     enum: ["Full Test", "Subject Test", "Chapter Test"],
     required: true,
   },
-  testSeries: {
+  course: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "TestSeries",
+    ref: "Course",
     required: true,
   },
   createdAt: {
@@ -69,6 +57,8 @@ const mockTestSchema = new mongoose.Schema({
   },
 });
 
-const MockTest = mongoose.model("MockTest", mockTestSchema);
-module.exports = MockTest;
-
+const PreparationTest = mongoose.model(
+  "PreparationTest",
+  preparationTestSchema
+);
+module.exports = PreparationTest;

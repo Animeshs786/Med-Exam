@@ -136,12 +136,23 @@ const {
 } = require("../controllers/user/courese/getCourseClass");
 const globalSearch = require("../controllers/user/home/globalSearch");
 const { suggestedResult } = require("../controllers/user/home/suggestedResult");
-const { getNoteChapterDetail } = require("../controllers/user/noteSubject/getNoteChapterDetail");
-const { getNoteSubjects } = require("../controllers/user/notes/getNoteSubjects");
-const { getAllMockTest } = require("../controllers/user/mockTest/getAllMockTest");
-const { getTestSeriesSubject } = require("../controllers/user/testSeries/getTestSeriesSubject");
-const { getAllQuestions } = require("../controllers/user/question/getAllQuestion");
+const {
+  getNoteChapterDetail,
+} = require("../controllers/user/noteSubject/getNoteChapterDetail");
+const {
+  getNoteSubjects,
+} = require("../controllers/user/notes/getNoteSubjects");
+const {
+  getAllMockTest,
+} = require("../controllers/user/mockTest/getAllMockTest");
+const {
+  getTestSeriesSubject,
+} = require("../controllers/user/testSeries/getTestSeriesSubject");
+const {
+  getAllQuestions,
+} = require("../controllers/user/question/getAllQuestion");
 const { getMockTest } = require("../controllers/user/mockTest/getMockTest");
+const { attemptTest } = require("../controllers/user/testResult/attemptTest");
 
 const router = express.Router();
 
@@ -202,8 +213,8 @@ router.get("/leaderboard/:id", userAuthenticate, getLeaderboard);
 router.get("/home", getHome);
 router.get("/homeApi", userAuthenticate, homeApi);
 router.get("/homeWebApi", homeWebApi);
-router.get("/globalSearch",globalSearch)
-router.get("/searchSuggestion",suggestedResult)
+router.get("/globalSearch", globalSearch);
+router.get("/searchSuggestion", suggestedResult);
 
 //Test Series
 router.get("/testSeries", userAuthenticate, getAllTestSeries);
@@ -235,11 +246,11 @@ router.route("/recommendedNotes").get(userAuthenticate, getRecommendedNotes);
 router.route("/notesBanner").get(getNoteBanner);
 router.get("/topNotes", getTopNotes);
 router.get("/notesHome", userAuthenticate, notesApi);
-router.get("/noteSubjects",userAuthenticate, getNoteSubjects)
+router.get("/noteSubjects", userAuthenticate, getNoteSubjects);
 
 //Note Subject
 router.get("/noteSubject", getNoteSubject);
-router.get("/noteSubject/:id",userAuthenticate, getNoteChapterDetail);
+router.get("/noteSubject/:id", userAuthenticate, getNoteChapterDetail);
 
 //MyContent
 router.get("/myContent/notes", userAuthenticate, getPurchaseNotes);
@@ -284,11 +295,13 @@ router.get("/getState", getState);
 router.get("/getCity", getCity);
 
 //Mock Test
-router.get("/mockTest",getAllMockTest)
-router.get("/mockTest/:id",getMockTest)
+router.get("/mockTest", getAllMockTest);
+router.get("/mockTest/:id", getMockTest);
 
 //question
 router.get("/question", userAuthenticate, getAllQuestions);
 
+//attempt test
+router.post("/attemptTest", userAuthenticate, attemptTest);
 
 module.exports = router;

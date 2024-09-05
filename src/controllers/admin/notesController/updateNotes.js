@@ -30,11 +30,10 @@ exports.updateNote = catchAsync(async (req, res, next) => {
     }
   }
 
-  const { name, price, exam, subHeading,detail,description,course } = req.body;
+  const { name, exam, subHeading,detail,description,course } = req.body;
   const updatedData = {};
 
   if (name) updatedData.name = name;
-  if (price) updatedData.price = price;
   if (exam) updatedData.exam = JSON.parse(exam);
   if (detail) updatedData.detail = JSON.parse(detail);
   if (thumbImage) updatedData.thumbImage = thumbImage;

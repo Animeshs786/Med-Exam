@@ -1,32 +1,32 @@
-const Note = require("../../../models/notes");
+const QuestionImage = require("../../../models/questionImage");
 const catchAsync = require("../../../utils/catchAsync");
 const pagination = require("../../../utils/pagination");
 
-exports.getAllNotes = catchAsync(async (req, res) => {
-  const { search, course, page: currentPage, limit: currentLimit } = req.query;
+exports.getAllQuestionImages = catchAsync(async (req, res) => {
+  const { page: currentPage, limit: currentLimit, search } = req.query;
   const filterObj = {};
 
   if (search) filterObj.name = { $regex: search, $options: "i" };
-  if (course) filterObj.course = course;
 
   const { limit, skip, totalResult, totalPage } = await pagination(
     currentPage,
     currentLimit,
-    Note,
+    QuestionImage,
     null,
     filterObj
   );
-
-  const notes = await Note.find(filterObj).skip(skip).limit(limit);
+  const questionImages = await QuestionImage.find(filterObj)
+    .sort("-createdAt")
+    .skip(skip)
+    .limit(limit);
 
   res.status(200).json({
     status: true,
+    results: questionImages.length,
     totalResult,
     totalPage,
-    message: "Notes fetched successfully",
-    results: notes.length,
     data: {
-      notes,
+      questionImages,
     },
   });
 });

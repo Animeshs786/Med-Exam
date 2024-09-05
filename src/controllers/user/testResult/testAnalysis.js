@@ -1,3 +1,94 @@
+// const TestResult = require("../../../models/testResult");
+// const Question = require("../../../models/question");
+// const catchAsync = require("../../../utils/catchAsync");
+// const AppError = require("../../../utils/AppError");
+
+// exports.getTestAnalysis = catchAsync(async (req, res, next) => {
+//   const testResultId = req.params.id;
+
+//   // Find the test result by ID
+//   const testResult = await TestResult.findById(testResultId)
+//     .populate({
+//       path: "submittedAnswers.question",
+//       populate: { path: "subject" },
+//     })
+//     .populate("mockTest");
+
+//   if (!testResult) {
+//     return next(new AppError("Test result not found", 404));
+//   }
+
+//   // Get all questions for the mock test
+//   const questions = await Question.find({
+//     mockTest: testResult.mockTest._id,
+//   }).populate("subject");
+
+//   // Prepare the analysis
+//   const analysis = questions.map((question) => {
+//     const submittedAnswer = testResult.submittedAnswers.find((sa) =>
+//       sa.question._id.equals(question._id)
+//     );
+
+//     let questionText, correctAnswer, options, solutionImage;
+
+//     if (submittedAnswer && submittedAnswer.language === "Hindi") {
+//       questionText = question.questionNameHindi;
+//       correctAnswer = question.correctAnswerHindi;
+//       options = question.optionsHindi;
+//       solutionImage = question.solutionImageHindi;
+//     } else {
+//       questionText = question.questionNameEnglish;
+//       correctAnswer = question.correctAnswerEnglish;
+//       options = question.optionsEnglish;
+//       solutionImage = question.solutionImageEnglish;
+//     }
+
+//     return {
+//       question: {
+//         id: question._id,
+//         text: questionText,
+//         correctAnswer: correctAnswer,
+//         options: options,
+//         subject: question.subject,
+//         solutionImage: solutionImage,
+//       },
+//       userAnswer: submittedAnswer ? submittedAnswer.answer : null,
+//       bookmarked: submittedAnswer ? submittedAnswer.bookmarked : false,
+//       isCorrect: submittedAnswer ? submittedAnswer.isCorrect : false,
+//     };
+//   });
+
+//   // Sort analysis by subject
+//   analysis.sort((a, b) => {
+//     if (a.question.subject.name < b.question.subject.name) return -1;
+//     if (a.question.subject.name > b.question.subject.name) return 1;
+//     return 0;
+//   });
+
+//   res.status(200).json({
+//     status: true,
+//     message: "Test analysis fetched successfully",
+//     data: {
+//       testResult: {
+//         user: testResult.user,
+//         mockTest: testResult.mockTest,
+//         totalCorrect: testResult.totalCorrect,
+//         totalIncorrect: testResult.totalIncorrect,
+//         totalUnattempted: testResult.totalUnattempted,
+//         skip: testResult.skip,
+//         totalAttempted: testResult.totalAttempted,
+//         totalMarks: testResult.totalMarks,
+//         accuracy: testResult.accuracy,
+//         timeTaken: testResult.timeTaken,
+//         speed: testResult.speed,
+//         createdAt: testResult.createdAt,
+//       },
+//       analysis,
+//     },
+//   });
+// });
+
+
 const TestResult = require("../../../models/testResult");
 const Question = require("../../../models/question");
 const catchAsync = require("../../../utils/catchAsync");
@@ -29,30 +120,32 @@ exports.getTestAnalysis = catchAsync(async (req, res, next) => {
       sa.question._id.equals(question._id)
     );
 
-    let questionText, correctAnswer, options, solutionImage;
+    let questionText, correctAnswerIndex, options, solutionImage, userAnswerIndex;
 
     if (submittedAnswer && submittedAnswer.language === "Hindi") {
       questionText = question.questionNameHindi;
-      correctAnswer = question.correctAnswerHindi;
+      correctAnswerIndex = question.correctAnswerHindi;
       options = question.optionsHindi;
       solutionImage = question.solutionImageHindi;
+      userAnswerIndex = submittedAnswer ? submittedAnswer.answerIndex : null;
     } else {
       questionText = question.questionNameEnglish;
-      correctAnswer = question.correctAnswerEnglish;
+      correctAnswerIndex = question.correctAnswerEnglish;
       options = question.optionsEnglish;
       solutionImage = question.solutionImageEnglish;
+      userAnswerIndex = submittedAnswer ? submittedAnswer.answerIndex : null;
     }
 
     return {
       question: {
         id: question._id,
         text: questionText,
-        correctAnswer: correctAnswer,
+        correctAnswerIndex: parseInt(correctAnswerIndex, 10), // Convert to number
         options: options,
         subject: question.subject,
         solutionImage: solutionImage,
       },
-      userAnswer: submittedAnswer ? submittedAnswer.answer : null,
+      userAnswerIndex: userAnswerIndex !== null ? parseInt(userAnswerIndex, 10) : null, // Convert to number
       bookmarked: submittedAnswer ? submittedAnswer.bookmarked : false,
       isCorrect: submittedAnswer ? submittedAnswer.isCorrect : false,
     };

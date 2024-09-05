@@ -8,7 +8,7 @@ const classSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ["Live", "Recorded"],
-    required: true,
+    default:"Recorded",
   },
   url: String,
   schedule: {

@@ -8,18 +8,18 @@ exports.homeApi = async (req, res, next) => {
       await Promise.all([
         Banner.find(),
         Course.find({
-          exam: { $in: userExam },
+          exam: { $in: [userExam] },
         }).select(
-          "name price duration rating ratingNumber thumbImage lesson logo"
+          "name price duration rating ratingNumber thumbImage lesson logo bannerImage"
         ),
         Course.find()
           .select(
-            "name price duration rating ratingNumber thumbImage lesson logo"
+            "name price duration rating ratingNumber thumbImage lesson logo bannerImage"
           )
           .sort({ purchaseNumber: -1 }),
         Course.find({ isPremium: true })
           .select(
-            "name price duration rating ratingNumber thumbImage lesson logo"
+            "name price duration rating ratingNumber thumbImage lesson logo bannerImage"
           )
           .sort({ createdAt: -1 }),
       ]);

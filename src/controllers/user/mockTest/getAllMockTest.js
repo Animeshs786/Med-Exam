@@ -3,13 +3,15 @@ const AppError = require("../../../utils/AppError");
 const catchAsync = require("../../../utils/catchAsync");
 
 exports.getAllMockTest = catchAsync(async (req, res, next) => {
-  const { testSeries, testType, search,subject } = req.query;
+  const { testSeries, testType, search, subject } = req.query;
   if (!testSeries) return next(new AppError("Please provide test series", 400));
   if (!testType) return next(new AppError("Please provide test type", 400));
 
   let query = {};
   if (testSeries) query.testSeries = testSeries;
-  if (testType) query.testType = testType;
+  if (testType) {
+    query.testType = testType.split("_").join(" ");
+  }
   if (subject) query.subject = subject;
   if (search) {
     query.name = { $regex: search, $options: "i" };

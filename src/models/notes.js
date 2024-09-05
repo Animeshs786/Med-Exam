@@ -10,10 +10,6 @@ const notesSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    price: {
-      type: Number,
-      required: [true, "Price must be required."],
-    },
     rating: {
       type: Number,
       default: 0,
