@@ -230,7 +230,31 @@ const {
 const {
   removeQuestionFromPreparationTest,
 } = require("../controllers/admin/preparationTestController/removeQuestionFromPreparationTest");
-const { clonePreparationTest } = require("../controllers/admin/preparationTestController/clonePreparationTest");
+const {
+  clonePreparationTest,
+} = require("../controllers/admin/preparationTestController/clonePreparationTest");
+const {
+  createQuestionImage,
+} = require("../controllers/admin/questionImage/createQuestionImage");
+const {
+  getAllQuestionImages,
+} = require("../controllers/admin/questionImage/getAllQuestionImage");
+const {
+  getQuestionImage,
+} = require("../controllers/admin/questionImage/getQuestionImage");
+const {
+  deleteQuestionImage,
+} = require("../controllers/admin/questionImage/deleteQuestionImage");
+const {
+  updateQuestionImage,
+} = require("../controllers/admin/questionImage/updateQuestionImage");
+const { getAllUsers } = require("../controllers/admin/user/getAllUser");
+const {
+  addQuestionToMcq,
+} = require("../controllers/admin/questionController/addQuestionToMcq");
+const {
+  addRemoveMcq,
+} = require("../controllers/admin/questionController/addRemoveMcq");
 
 const router = express.Router();
 
@@ -633,5 +657,62 @@ router
     updateNoteSubject
   )
   .delete(deleteNoteSubject);
+
+router.post("/assignMcq", addQuestionToMcq);
+
+//Question Image
+router
+  .route("/questionImage")
+  .post(
+    fileUploader(
+      [
+        { name: "questionImageEnglish", maxCount: 1 },
+        { name: "solutionImageEnglish", maxCount: 1 },
+        { name: "optionImage1English", maxCount: 1 },
+        { name: "optionImage2English", maxCount: 1 },
+        { name: "optionImage3English", maxCount: 1 },
+        { name: "optionImage4English", maxCount: 1 },
+        { name: "questionImageHindi", maxCount: 1 },
+        { name: "solutionImageHindi", maxCount: 1 },
+        { name: "optionImage1Hindi", maxCount: 1 },
+        { name: "optionImage2Hindi", maxCount: 1 },
+        { name: "optionImage3Hindi", maxCount: 1 },
+        { name: "optionImage4Hindi", maxCount: 1 },
+      ],
+      "question"
+    ),
+    createQuestionImage
+  )
+  .get(getAllQuestionImages);
+
+router
+  .route("/questionImage/:id")
+  .get(getQuestionImage)
+  .patch(
+    fileUploader(
+      [
+        { name: "questionImageEnglish", maxCount: 1 },
+        { name: "solutionImageEnglish", maxCount: 1 },
+        { name: "optionImage1English", maxCount: 1 },
+        { name: "optionImage2English", maxCount: 1 },
+        { name: "optionImage3English", maxCount: 1 },
+        { name: "optionImage4English", maxCount: 1 },
+        { name: "questionImageHindi", maxCount: 1 },
+        { name: "solutionImageHindi", maxCount: 1 },
+        { name: "optionImage1Hindi", maxCount: 1 },
+        { name: "optionImage2Hindi", maxCount: 1 },
+        { name: "optionImage3Hindi", maxCount: 1 },
+        { name: "optionImage4Hindi", maxCount: 1 },
+      ],
+      "question"
+    ),
+    updateQuestionImage
+  )
+  .delete(deleteQuestionImage);
+
+//user
+router.get("/user", getAllUsers);
+
+router.post("/addRemoveMcq", addRemoveMcq);
 
 module.exports = router;

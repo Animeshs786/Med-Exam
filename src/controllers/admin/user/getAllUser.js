@@ -1,19 +1,22 @@
-const Transaction = require("../../../models/transaction");
+const User = require("../../../models/user");
 const catchAsync = require("../../../utils/catchAsync");
 const pagination = require("../../../utils/pagination");
 
-exports.getAllTransaction = catchAsync(async (req, res) => {
+exports.getAllUsers = catchAsync(async (req, res) => {
   const {
     page: currentPage,
     limit: currentLimit,
+    name,
     startDate,
     endDate,
-    orederStatus,
-    user,
+    exam,
   } = req.query;
   const filterObj = {};
 
-  // Add date range filtering if startDate or endDate are provided
+  if (name) {
+    filterObj.name = { $regex: name, $options: "i" };
+  }
+
   if (startDate || endDate) {
     filterObj.createdAt = {};
     if (startDate) {
@@ -23,25 +26,21 @@ exports.getAllTransaction = catchAsync(async (req, res) => {
       filterObj.createdAt.$lte = new Date(endDate);
     }
   }
-
-  if (orederStatus) {
-    filterObj.orderStatus = orederStatus;
-  }
-
-  if (user) {
-    filterObj.user = user;
+  if (exam) {
+    filterObj.exam = exam;
   }
 
   const { limit, skip, totalResult, totalPage } = await pagination(
     currentPage,
     currentLimit,
-    Transaction,
+    User,
     null,
     filterObj
   );
-  const transaction = await Transaction.find(filterObj)
-    .populate("user onModel")
+
+  const users = await User.find(filterObj)
     .sort("-createdAt")
+    .populate("exam", "name")
     .skip(skip)
     .limit(limit);
 
@@ -49,9 +48,9 @@ exports.getAllTransaction = catchAsync(async (req, res) => {
     status: true,
     totalResult,
     totalPage,
-    results: transaction.length,
+    results: users.length,
     data: {
-      transaction,
+      users,
     },
   });
 });

@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
 
 const createToken = (user, statusCode, res, verify = false) => {
-  const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET, {
-    expiresIn: process.env.JWT_TOKEN_EXPIRY,
-  });
+  // const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET, {
+  //   expiresIn: process.env.JWT_TOKEN_EXPIRY,
+  // });
+
+  const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET);
 
   const cookieOptions = {
     httpOnly: true,

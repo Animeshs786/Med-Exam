@@ -9,11 +9,14 @@ exports.getAllQuestions = catchAsync(async (req, res) => {
     mockTest,
     page: currentPage,
     limit: currentLimit,
+    isMcq,
   } = req.query;
   const obj = {};
+
   if (subject) obj.subject = subject;
   if (search) obj.question = { $regex: search, $options: "i" };
   if (mockTest) obj.mockTest = { $in: [mockTest] };
+  if (isMcq) obj.isMcq = isMcq;
 
   const { limit, skip, totalResult, totalPage } = await pagination(
     currentPage,

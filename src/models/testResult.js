@@ -6,37 +6,49 @@ const testResultSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  // submittedAnswers: [
+  //   {
+  //     question: {
+  //       type: mongoose.Schema.Types.ObjectId,
+  //       ref: "Question",
+  //       required: true,
+  //     },
+  //     answer: {
+  //       type: String,
+  //       default: null,
+  //     },
+  //     language: {
+  //       type: String,
+  //       enum: ["English", "Hindi"],
+  //       default: "English",
+  //     },
+  //     type: {
+  //       type: String,
+  //       enum: ["Submit", "Mark"],
+  //       required: true,
+  //     },
+  //     bookmarked: {
+  //       type: Boolean,
+  //       default: false,
+  //     },
+  //     isCorrect: {
+  //       type: Boolean,
+  //       default: false,
+  //     },
+  //   },
+  // ],
+  submittedAnswers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SubmittedAnswer",
+      required: true,
+    },
+  ],
   mockTest: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "MockTest",
     required: true,
   },
-  submittedAnswers: [
-    {
-      question: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Question",
-        required: true,
-      },
-      answer: {
-        type: String,
-        default: null,
-      },
-      language: {
-        type: String,
-        enum:["English","Hindi"],
-        default: "English",
-      },
-      bookmarked: {
-        type: Boolean,
-        default: false,
-      },
-      isCorrect: {
-        type: Boolean,
-        default: false,
-      },
-    },
-  ],
   totalCorrect: {
     type: Number,
     default: 0,

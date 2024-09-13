@@ -10,9 +10,7 @@ exports.getAllMockTests = catchAsync(async (req, res) => {
     query.name = { $regex: search, $options: "i" };
   }
 
-  const mockTests = await MockTest.find(query).select(
-    "name thumbImage minute isPaid"
-  );
+  const mockTests = await MockTest.find(query)
 
   res.status(200).json({
     status: true,

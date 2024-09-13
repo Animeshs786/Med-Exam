@@ -24,8 +24,7 @@ exports.removeQuestionFromPreparationTest = catchAsync(
     await question.save();
     res.status(200).json({
       status: true,
-      message: "Preparation test ID removed from question.",
-      data: question,
+      message: "Question Removed Successfully.",
     });
   }
 );

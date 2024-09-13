@@ -3,7 +3,7 @@ const AppError = require("../../../utils/AppError");
 const catchAsync = require("../../../utils/catchAsync");
 const deleteOldFiles = require("../../../utils/deleteOldFiles");
 
-exports.updateQuestion = catchAsync(async (req, res, next) => {
+exports.updateQuestionImage = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
 

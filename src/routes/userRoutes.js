@@ -153,6 +153,13 @@ const {
 } = require("../controllers/user/question/getAllQuestion");
 const { getMockTest } = require("../controllers/user/mockTest/getMockTest");
 const { attemptTest } = require("../controllers/user/testResult/attemptTest");
+const { clearTest } = require("../controllers/user/testResult/clearTest");
+const { setTestTime } = require("../controllers/user/testResult/setTestTime");
+const {
+  getMcqOfTheDay,
+} = require("../controllers/user/question/getMcqOfTheDay");
+const { submitMcq } = require("../controllers/user/question/submitMcq");
+const { getSolution } = require("../controllers/user/question/getSolution");
 
 const router = express.Router();
 
@@ -303,5 +310,13 @@ router.get("/question", userAuthenticate, getAllQuestions);
 
 //attempt test
 router.post("/attemptTest", userAuthenticate, attemptTest);
+router.post("/clearTest", userAuthenticate, clearTest);
+router.post("/testTime", userAuthenticate, setTestTime);
+
+//Mcq
+router.get("/mcq", userAuthenticate, getMcqOfTheDay);
+router.post("/mcq", userAuthenticate, submitMcq);
+router.post("/solution", userAuthenticate, getSolution);
+
 
 module.exports = router;

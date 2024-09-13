@@ -101,6 +101,13 @@ const questionSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  isMcq: {
+    type: Boolean,
+    default: false,
+  },
+  showAt: {
+    type: Date,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

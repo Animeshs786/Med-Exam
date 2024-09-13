@@ -19,27 +19,44 @@ exports.attemptTest = catchAsync(async (req, res) => {
 
   const questionData = await Question.findById(question);
 
-  const attemptTest = await AttemptTest.create({
+  let attemptTest = await AttemptTest.findOne({
     mockTest,
     userId,
-    timeTaken,
-    givenAnswerIndex,
-    isSubmitted,
-    isMarkedForReview,
-    questionLanguage,
     question,
-    accessQuestion: questionData?.queGivenTime > timeTaken ? true : false,
   });
 
+  if (attemptTest) {
+    attemptTest.givenAnswerIndex = givenAnswerIndex;
+    attemptTest.isSubmitted = isSubmitted;
+    attemptTest.isMarkedForReview = isMarkedForReview;
+    attemptTest.timeTaken = timeTaken;
+    attemptTest.questionLanguage = questionLanguage;
+    attemptTest.accessQuestion =
+      questionData?.queGivenTime > timeTaken ? true : false;
+    await attemptTest.save();
+  } else {
+    attemptTest = await AttemptTest.create({
+      mockTest,
+      userId,
+      timeTaken,
+      givenAnswerIndex,
+      isSubmitted,
+      isMarkedForReview,
+      questionLanguage,
+      question,
+      accessQuestion: questionData?.queGivenTime > timeTaken ? true : false,
+    });
+  }
+  const modifyTotalTime = totalTime.split(":")[0];
   let testTime = await TestTime.findOne({ user: userId, mockTest });
   if (!testTime) {
     await TestTime.create({
-      testTime: totalTime,
+      testTime: +modifyTotalTime,
       user: userId,
       mockTest,
     });
   } else {
-    testTime.time = totalTime;
+    testTime.testTime = +modifyTotalTime;
     await testTime.save();
   }
 

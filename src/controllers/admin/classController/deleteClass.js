@@ -11,9 +11,8 @@ exports.deleteClass = catchAsync(async (req, res, next) => {
     return next(new AppError("Class not found", 404));
   }
 
-  res.status(204).json({
+  res.status(200).json({
     status: true,
     message: "Class deleted successfully",
-    data: null,
   });
 });
