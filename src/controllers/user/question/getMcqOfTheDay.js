@@ -9,15 +9,15 @@ exports.getMcqOfTheDay = catchAsync(async (req, res) => {
   const endOfDay = new Date();
   endOfDay.setHours(23, 59, 59, 999);
 
-  const userId = req.user._id;
+  const userId = req.user?._id;
 
   const mcqQuestions = await Question.find({
     isMcq: true,
     showAt: { $gte: startOfDay, $lte: endOfDay },
-  });
+  }).select("-preparationTest -questionBank -customBank");
 
   const existingSubmission = await SubmittedAnswer.findOne({
-    question: mcqQuestions[0]._id,
+    question: mcqQuestions[0]?._id,
     user: userId,
     type: "MCQ",
     createdAt: { $gte: startOfDay, $lte: endOfDay },

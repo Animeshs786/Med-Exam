@@ -9,6 +9,18 @@ const attemptTest = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "MockTest",
   },
+  questionBank: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "QuestionBank",
+  },
+  customQueBank: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "CustomQueBank",
+  },
+  preparationTest: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "PreparationTest",
+  },
   question: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Question",
@@ -33,9 +45,9 @@ const attemptTest = new mongoose.Schema({
     type: Boolean,
     default: true, //timeTaken greater or equal to queGivenTime then turn its value false
   },
-  questionLanguage:{
-    type:String,
-    default:"English"
+  questionLanguage: {
+    type: String,
+    default: "English",
   },
   createdAt: {
     type: Date,

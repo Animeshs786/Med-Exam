@@ -17,6 +17,8 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
   } = req.body;
   const obj = {};
   const id = req.user._id;
+  console.log(req.body, "body");
+  console.log(req.files, "files");
 
   if (!isValidObjectId(id)) {
     return next(new AppError("Invalid id", 400));

@@ -4,7 +4,7 @@ const catchAsync = require("../../../utils/catchAsync");
 
 exports.getClass = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const singleClass = await Class.findById(id).populate("course");
+  const singleClass = await Class.findById(id);
 
   if (!singleClass) {
     return next(new AppError("Class not found", 404));

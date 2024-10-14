@@ -24,6 +24,14 @@ const submittedSchema = new mongoose.Schema({
     enum: ["Submit", "Mark", "MCQ"],
     required: true,
   },
+  isPreparation: {
+    type: Boolean,
+    default: false,
+  },
+  isTemp:{
+    type:Boolean,
+    default:false,
+  },
   bookmarked: {
     type: Boolean,
     default: false,

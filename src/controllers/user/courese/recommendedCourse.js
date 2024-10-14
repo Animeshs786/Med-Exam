@@ -1,8 +1,10 @@
 const Course = require("../../../models/course");
+const Transaction = require("../../../models/transaction");
 const catchAsync = require("../../../utils/catchAsync");
 
 exports.getRecommendedCourses = catchAsync(async (req, res) => {
   const { courseId } = req.query;
+  const userId = req.user._id;
   const userExam = req.user.exam;
 
   const recommendedCoursesSet = new Set();
@@ -10,6 +12,18 @@ exports.getRecommendedCourses = catchAsync(async (req, res) => {
 
   const queryType = req.query.type || "id";
   let course;
+
+  // Fetch purchased courses for the user
+  const purchasedCourses = await Transaction.find({
+    user: userId,
+    onModel: "Course",
+    orderStatus: "success",
+  }).select("item");
+
+  // Get the IDs of purchased courses
+  const purchasedCourseIds = purchasedCourses.map(
+    (transaction) => transaction.item
+  );
 
   if (courseId) {
     if (queryType === "slug") {
@@ -28,10 +42,9 @@ exports.getRecommendedCourses = catchAsync(async (req, res) => {
     const examIds = course.exam.map((exam) => exam._id);
 
     let recommendedCoursesByExam = await Course.find({
-      _id: { $ne: course._id },
+      _id: { $ne: course._id, $nin: purchasedCourseIds },
       exam: { $in: examIds },
     }).select("name price duration rating ratingNumber thumbImage lesson logo");
-
 
     recommendedCoursesByExam.forEach((course) => {
       if (!recommendedCoursesSet.has(course._id.toString())) {
@@ -42,6 +55,7 @@ exports.getRecommendedCourses = catchAsync(async (req, res) => {
   } else {
     combinedRecommendedCourses = await Course.find({
       exam: { $in: userExam },
+      _id: { $nin: purchasedCourseIds },
     }).select("name price duration rating ratingNumber thumbImage lesson logo");
   }
 

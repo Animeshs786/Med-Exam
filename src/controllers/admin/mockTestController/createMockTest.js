@@ -43,12 +43,9 @@ exports.createMockTest = catchAsync(async (req, res, next) => {
   }
 
   if (testType == "Chapter Test") {
-    if (subjects || subject)
+    if (subjects)
       return next(
-        new AppError(
-          "In chapter test subjects or subject are not required",
-          400
-        )
+        new AppError("In chapter test subjects  are not required", 400)
       );
   }
   if (req.files?.thumbImage) {

@@ -6,7 +6,7 @@
 // const AppError = require("../../../utils/AppError");
 
 // exports.importQuestionFromCsv = catchAsync(async (req, res, next) => {
-//   const { mockTest } = req.body;
+//   const { mockTest, preparationTest, questionBank } = req.body;
 
 //   if (!req.files || !req.files.csvFile) {
 //     return next(new AppError("No file uploaded", 400));
@@ -54,7 +54,9 @@
 //               row["Option 4 Hindi"],
 //             ],
 //             subject: subject?._id || null,
-//             mockTest: mockTest,
+//             mockTest: mockTest || null,
+//             preparationTest: preparationTest || null,
+//             questionBank: questionBank || null,
 //             questionImageEnglish:
 //               row["Question Image English"] !== "Null"
 //                 ? row["Question Image English"]
@@ -63,23 +65,20 @@
 //               row["Solution Image English"] !== "Null"
 //                 ? row["Solution Image English"]
 //                 : "",
-//             optionImage1English:
+//             optionImageEnglish: [
 //               row["Option 1 Image English"] !== "Null"
 //                 ? row["Option 1 Image English"]
 //                 : "",
-//             optionImage2English:
 //               row["Option 2 Image English"] !== "Null"
 //                 ? row["Option 2 Image English"]
 //                 : "",
-//             optionImage3English:
 //               row["Option 3 Image English"] !== "Null"
 //                 ? row["Option 3 Image English"]
 //                 : "",
-//             optionImage4English:
 //               row["Option 4 Image English"] !== "Null"
 //                 ? row["Option 4 Image English"]
 //                 : "",
-
+//             ],
 //             questionImageHindi:
 //               row["Question Image Hindi"] !== "Null"
 //                 ? row["Question Image Hindi"]
@@ -88,22 +87,20 @@
 //               row["Solution Image Hindi"] !== "Null"
 //                 ? row["Solution Image Hindi"]
 //                 : "",
-//             optionImage1Hindi:
+//             optionImageHindi: [
 //               row["Option 1 Image Hindi"] !== "Null"
 //                 ? row["Option 1 Image Hindi"]
 //                 : "",
-//             optionImage2Hindi:
 //               row["Option 2 Image Hindi"] !== "Null"
 //                 ? row["Option 2 Image Hindi"]
 //                 : "",
-//             optionImage3Hindi:
 //               row["Option 3 Image Hindi"] !== "Null"
 //                 ? row["Option 3 Image Hindi"]
 //                 : "",
-//             optionImage4Hindi:
 //               row["Option 4 Image Hindi"] !== "Null"
 //                 ? row["Option 4 Image Hindi"]
 //                 : "",
+//             ],
 //             solutionDetailEnglish:
 //               row["Solution Detail English"] !== "Null"
 //                 ? row["Solution Detail English"]
@@ -136,7 +133,6 @@
 //     });
 // });
 
-
 const fs = require("fs");
 const csv = require("csv-parser");
 const Question = require("../../../models/question");
@@ -145,7 +141,7 @@ const catchAsync = require("../../../utils/catchAsync");
 const AppError = require("../../../utils/AppError");
 
 exports.importQuestionFromCsv = catchAsync(async (req, res, next) => {
-  const { mockTest } = req.body;
+  const { mockTest, preparationTest, questionBank, isMcq } = req.body;
 
   if (!req.files || !req.files.csvFile) {
     return next(new AppError("No file uploaded", 400));
@@ -155,19 +151,61 @@ exports.importQuestionFromCsv = catchAsync(async (req, res, next) => {
 
   const results = [];
 
+  // Regex pattern to validate subject name (allows only alphabets and spaces)
+  const subjectNameRegex = /^[a-zA-Z\s]+$/;
+
   fs.createReadStream(filePath)
     .pipe(csv())
     .on("data", (data) => results.push(data))
     .on("end", async () => {
       try {
-        for (const row of results) {
-          const subject = await Subject.findOne({ name: row["Subject Name"] });
+        // Step 1: Verify all subjects exist using case-insensitive comparison
+        const subjectNames = [
+          ...new Set(
+            results
+              .map((row) => row["Subject Name"].trim()) // Trim and normalize
+              .filter((name) => subjectNameRegex.test(name)) // Only include valid subject names
+          ),
+        ];
 
-          if (!subject) {
-            return next(
-              new AppError(`Subject ${row["Subject Name"]} not found`, 400)
-            );
-          }
+        // Convert all subject names to lowercase for comparison
+        const lowerCasedSubjectNames = subjectNames.map((name) =>
+          name.toLowerCase()
+        );
+
+        // Find subjects in the database where the lowercase version of the name matches
+        const subjects = await Subject.find({
+          name: {
+            $in: lowerCasedSubjectNames.map(
+              (name) => new RegExp(`^${name}$`, "i")
+            ),
+          },
+        });
+
+        const existingSubjectNames = subjects.map((subject) =>
+          subject.name.toLowerCase()
+        );
+
+        // Check if all subjects from the CSV exist in the database
+        const missingSubjects = lowerCasedSubjectNames.filter(
+          (subjectName) => !existingSubjectNames.includes(subjectName)
+        );
+
+        if (missingSubjects.length > 0) {
+          return next(
+            new AppError(
+              `Subjects not found: ${missingSubjects.join(", ")}`,
+              400
+            )
+          );
+        }
+
+        // Step 2: Proceed to upload questions if all subjects are verified
+        for (const row of results) {
+          const subject = subjects.find(
+            (subject) =>
+              subject.name.toLowerCase() === row["Subject Name"].toLowerCase()
+          );
 
           const question = new Question({
             questionNameEnglish:
@@ -192,8 +230,10 @@ exports.importQuestionFromCsv = catchAsync(async (req, res, next) => {
               row["Option 3 Hindi"],
               row["Option 4 Hindi"],
             ],
-            subject: subject?._id || null,
-            mockTest: mockTest,
+            subject: subject?._id,
+            mockTest: mockTest || [],
+            preparationTest: preparationTest || [],
+            questionBank: questionBank || [],
             questionImageEnglish:
               row["Question Image English"] !== "Null"
                 ? row["Question Image English"]
@@ -242,14 +282,16 @@ exports.importQuestionFromCsv = catchAsync(async (req, res, next) => {
               row["Solution Detail English"] !== "Null"
                 ? row["Solution Detail English"]
                 : "",
-            solutionDetailHind:
+            solutionDetailHindi:
               row["Solution Detail Hindi"] !== "Null"
                 ? row["Solution Detail Hindi"]
                 : "",
             createdAt:
               row["Created At"] !== "Null" ? row["Created At"] : Date.now(),
 
-            difficulty: row["Difficulty"],
+            difficulty: row["Difficulty"]?.trim(),
+            isMcq: isMcq || false,
+            showAt: row["Created At"] !== "Null" ? row["Created At"] : null,
           });
 
           await question.save();
@@ -260,6 +302,7 @@ exports.importQuestionFromCsv = catchAsync(async (req, res, next) => {
           message: "Questions uploaded successfully",
         });
       } catch (error) {
+        console.log(error, "error");
         next(new AppError("Error uploading questions", 500));
       } finally {
         fs.unlinkSync(filePath);

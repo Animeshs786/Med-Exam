@@ -14,7 +14,7 @@ const transactionScheama = new mongoose.Schema({
     type: String,
     required: true,
     enum: {
-      values: ["Course", "MockTest", "Note", "TestSeries", "PreviousPaper"],
+      values: ["Course"],
       message: " Value not supported.",
     },
   },

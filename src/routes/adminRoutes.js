@@ -255,6 +255,27 @@ const {
 const {
   addRemoveMcq,
 } = require("../controllers/admin/questionController/addRemoveMcq");
+const {
+  createQuestionBank,
+} = require("../controllers/admin/questionBank/createQuestionBank");
+const {
+  getAllQuestionBank,
+} = require("../controllers/admin/questionBank/getAllQuestionBank");
+const {
+  getQuestionBank,
+} = require("../controllers/admin/questionBank/getQuestionBank");
+const {
+  updateQuestionBank,
+} = require("../controllers/admin/questionBank/updateQuestionBank");
+const {
+  deleteQuestionBank,
+} = require("../controllers/admin/questionBank/deleteQuestionBank");
+const {
+  addQuestionToQuestionBank,
+} = require("../controllers/admin/questionBank/addQuestionToQuestionBank");
+const {
+  removeQuestionFromQuestionBank,
+} = require("../controllers/admin/questionBank/removeQuestionFromQuestionBank");
 
 const router = express.Router();
 
@@ -714,5 +735,30 @@ router
 router.get("/user", getAllUsers);
 
 router.post("/addRemoveMcq", addRemoveMcq);
+
+//Question bank
+router
+  .route("/questionBank")
+  .post(
+    fileUploader([{ name: "thumbImage", maxCount: 1 }], "questionBank"),
+    createQuestionBank
+  )
+  .get(getAllQuestionBank);
+
+router
+  .route("/questionBank/:id")
+  .get(getQuestionBank)
+  .patch(
+    fileUploader([{ name: "thumbImage", maxCount: 1 }], "questionBank"),
+    updateQuestionBank
+  )
+  .delete(deleteQuestionBank);
+
+router.post("/addQuestionToQuestionBank", addQuestionToQuestionBank);
+
+router.delete(
+  "/removeQuestionFromQuestionBank",
+  removeQuestionFromQuestionBank
+);
 
 module.exports = router;

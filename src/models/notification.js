@@ -12,8 +12,20 @@ const notificationSchema = new mongoose.Schema(
     },
     thumbImage: {
       type: String,
-      default: ""
+      default: "",
     },
+    redirectType: {
+      type: String,
+      default: "Internal",
+      enum: ["Internal", "External"],
+    },
+    type: {
+      type: String,
+      enum: ["testSeries", "note", "course", "class", "announcement"],
+      required: true,
+    },
+    webUrl: String,
+    url: String,
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -27,7 +39,7 @@ const notificationSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-      }
+      },
     ],
   },
   {

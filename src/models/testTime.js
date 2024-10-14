@@ -13,7 +13,18 @@ const testTimeSchema = new mongoose.Schema({
   mockTest: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "MockTest",
-    required: true,
+  },
+  questionBank: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "QuestionBank",
+  },
+  preparationTest: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "PreparationTest",
+  },
+  customQueBank: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "CustomQueBank",
   },
   createdAt: {
     type: Date,

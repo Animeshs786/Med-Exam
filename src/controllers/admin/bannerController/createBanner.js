@@ -13,11 +13,11 @@ exports.createBanner = catchAsync(async (req, res, next) => {
     return next(new AppError("Image is required", 400));
   }
 
-  if (req.files && req.files.webImage) {
-    webImage = `${req.files.webImage[0].destination}/${req.files.webImage[0].filename}`;
-  } else {
-    return next(new AppError("WebImage is required", 400));
-  }
+  // if (req.files && req.files.webImage) {
+  //   webImage = `${req.files.webImage[0].destination}/${req.files.webImage[0].filename}`;
+  // } else {
+  //   return next(new AppError("WebImage is required", 400));
+  // }
 
   // Create new banner
   const newBanner = await Banner.create({

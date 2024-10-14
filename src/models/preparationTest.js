@@ -19,7 +19,7 @@ const preparationTestSchema = new mongoose.Schema({
   },
   language: {
     type: String,
-    enum: ["Hindi", "English", "Both"],
+    enum: ["Hindi", "English", "English,Hindi"],
     default: "English",
   },
   subject: {

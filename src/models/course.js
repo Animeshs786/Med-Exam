@@ -64,7 +64,11 @@ const courseSchema = new mongoose.Schema(
     },
     isTestSeries: {
       type: Boolean,
-      default: false,
+      default: true,
+    },
+    isPreparationTest: {
+      type: Boolean,
+      default: true,
     },
     thumbImage: {
       type: String,

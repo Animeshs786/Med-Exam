@@ -160,6 +160,36 @@ const {
 } = require("../controllers/user/question/getMcqOfTheDay");
 const { submitMcq } = require("../controllers/user/question/submitMcq");
 const { getSolution } = require("../controllers/user/question/getSolution");
+const {
+  getAllPreparationTest,
+} = require("../controllers/user/preparationTest/getAllPreparationTest");
+const {
+  getPreparationTest,
+} = require("../controllers/user/preparationTest/getPreparationTest");
+const {
+  getAllQuestionBank,
+} = require("../controllers/user/questionBank/getAllQuestionBank");
+const {
+  getQuestionBank,
+} = require("../controllers/user/questionBank/getQuestionBank");
+const {
+  getQuestionBankSubject,
+} = require("../controllers/user/questionBank/getQuestionBankSubject");
+const {
+  createCustomBank,
+} = require("../controllers/user/customBank/createCustomBank");
+const {
+  getAllCustomBank,
+} = require("../controllers/user/customBank/getAllCustomBank");
+const {
+  getCustomBank,
+} = require("../controllers/user/customBank/getCustomBank");
+const {
+  getPreparationTestSubject,
+} = require("../controllers/user/preparationTest/getPreparationTestSubject");
+const {
+  deleteCustomBank,
+} = require("../controllers/user/customBank/deleteQuestionBank");
 
 const router = express.Router();
 
@@ -205,7 +235,7 @@ router.post(
 router.get("/myPurchases", userAuthenticate, getMyPurchase);
 
 //Banner
-router.get("/banner", getAllBanners);
+router.get("/banner", userAuthenticate, getAllBanners);
 
 //Review
 router.route("/review").post(userAuthenticate, addReview);
@@ -214,13 +244,13 @@ router.route("/review/:courseId").delete(userAuthenticate, deleteReview);
 //testResult
 router.route("/submitTest").post(userAuthenticate, submitTest);
 router.get("/testAnalysis/:id", userAuthenticate, getTestAnalysis);
-router.get("/leaderboard/:id", userAuthenticate, getLeaderboard);
+router.get("/leaderboard", userAuthenticate, getLeaderboard);
 
 //home
 router.get("/home", getHome);
 router.get("/homeApi", userAuthenticate, homeApi);
 router.get("/homeWebApi", homeWebApi);
-router.get("/globalSearch", globalSearch);
+router.get("/globalSearch", userAuthenticate, globalSearch);
 router.get("/searchSuggestion", suggestedResult);
 
 //Test Series
@@ -293,7 +323,6 @@ router
   .delete(userAuthenticate, deleteNoteBook);
 
 //class Rating Report
-
 router.route("/classRating").post(userAuthenticate, addOrUpdateRating);
 router.route("/classReport").post(userAuthenticate, addOrUpdateReport);
 
@@ -318,5 +347,29 @@ router.get("/mcq", userAuthenticate, getMcqOfTheDay);
 router.post("/mcq", userAuthenticate, submitMcq);
 router.post("/solution", userAuthenticate, getSolution);
 
+//Preparation Test
+router.get("/preparationTest", getAllPreparationTest);
+router.get("/preparationTest/:id", getPreparationTest);
+router.get(
+  "/preparationTestSubject",
+  userAuthenticate,
+  getPreparationTestSubject
+);
+
+//question Bank
+router.get("/questionBank", getAllQuestionBank);
+router.get("/questionBank/:id", getQuestionBank);
+router.get("/questionBankSubject", userAuthenticate, getQuestionBankSubject);
+
+//custom Bank
+router
+  .route("/customBank")
+  .post(userAuthenticate, createCustomBank)
+  .get(userAuthenticate, getAllCustomBank);
+
+router
+  .route("/customBank/:id")
+  .get(userAuthenticate, getCustomBank)
+  .delete(userAuthenticate, deleteCustomBank);
 
 module.exports = router;

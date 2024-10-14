@@ -40,10 +40,9 @@ exports.createCourse = catchAsync(async (req, res, next) => {
       subHeading,
       topDescription,
       bottomDescription,
-      isLive,
-      isRecorded,
       isPdf,
       isTestSeries,
+      isPreparationtest,
     } = req.body;
 
     const courseData = {
@@ -56,10 +55,9 @@ exports.createCourse = catchAsync(async (req, res, next) => {
       subHeading,
       topDescription,
       bottomDescription,
-      isLive,
-      isRecorded,
       isPdf,
       isTestSeries,
+      isPreparationtest,
     };
 
     if (!slug) {

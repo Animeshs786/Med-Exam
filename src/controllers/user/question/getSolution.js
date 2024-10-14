@@ -4,7 +4,7 @@ const catchAsync = require("../../../utils/catchAsync");
 const AppError = require("../../../utils/AppError");
 
 exports.getSolution = catchAsync(async (req, res, next) => {
-  const { questionId } = req.body;
+  const { questionId, type = "Submit" } = req.body;
   const userId = req.user.id;
 
   // Get the question by ID
@@ -12,13 +12,22 @@ exports.getSolution = catchAsync(async (req, res, next) => {
   if (!question) {
     return next(new AppError("Question not found.", 404));
   }
-
+  let userSubmission;
   // Get the user's submitted answer
-  const userSubmission = await SubmittedAnswer.findOne({
-    question: questionId,
-    user: userId,
-    type: "MCQ",
-  });
+  if (type === "Preparation") {
+    userSubmission = await SubmittedAnswer.findOne({
+      question: questionId,
+      user: userId,
+      type: "Submit",
+      isPreparation: true,
+    }).sort("-_id");
+  } else {
+    userSubmission = await SubmittedAnswer.findOne({
+      question: questionId,
+      user: userId,
+      type,
+    }).sort("-_id");
+  }
 
   if (!userSubmission) {
     return next(new AppError("No answer found for this user.", 404));
@@ -34,7 +43,7 @@ exports.getSolution = catchAsync(async (req, res, next) => {
   // Fetch all submissions for the question to calculate percentages
   const totalSubmissions = await SubmittedAnswer.countDocuments({
     question: questionId,
-    type: "MCQ",
+    type: type === "Preparation" ? "Submit" : type,
   });
 
   // Select options based on the language of the user's submission
@@ -48,12 +57,12 @@ exports.getSolution = catchAsync(async (req, res, next) => {
     options.map(async (option, index) => {
       const count = await SubmittedAnswer.countDocuments({
         question: questionId,
-        answer: index.toString(), // Matching the answer index
-        language: userSubmission.language, // Filter by the correct language
+        answer: index.toString(),
+        language: userSubmission.language,
       });
       return {
         option: option,
-        percentage: ((count / totalSubmissions) * 100).toFixed(2), // Calculate percentage
+        percentage: ((count / totalSubmissions) * 100).toFixed(2),
       };
     })
   );
@@ -69,6 +78,18 @@ exports.getSolution = catchAsync(async (req, res, next) => {
       userAnswer: userSubmission.answer,
       isCorrect,
       optionPercentage,
+      questionDetails: {
+        questionNameEnglish: question?.questionNameEnglish,
+        questionNameHindi: question?.questionNameHindi,
+        solutionImageEnglish: question?.solutionImageEnglish,
+        solutionImageHindi: question?.solutionImageHindi,
+        correctAnswerEnglish: question?.correctAnswerEnglish,
+        correctAnswerHindi: question?.correctAnswerHindi,
+        solutionDetailEnglish: question?.solutionDetailEnglish,
+        solutionDetailHind: question?.solutionDetailHind,
+        questionImageEnglish: question?.questionImageEnglish,
+        questionImageHindi: question?.questionImageHindi,
+      },
     },
   });
 });

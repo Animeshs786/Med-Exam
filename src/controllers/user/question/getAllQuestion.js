@@ -1,20 +1,26 @@
 const AttemptTest = require("../../../models/attemtTest");
 const Question = require("../../../models/question");
 const TestTime = require("../../../models/testTime");
-const AppError = require("../../../utils/AppError");
 const catchAsync = require("../../../utils/catchAsync");
 
-exports.getAllQuestions = catchAsync(async (req, res, next) => {
-  const { subject, search, mockTest } = req.query;
-  console.log(req.user._id, "testing");
+exports.getAllQuestions = catchAsync(async (req, res) => {
+  const {
+    subject,
+    search,
+    mockTest,
+    questionBank,
+    preparationTest,
+    customBank,
+  } = req.query;
   const userId = req.user._id;
-
-  if (!mockTest) return next(new AppError("Please provide a mock test", 400));
 
   const obj = {};
   if (subject) obj.subject = subject;
   if (search) obj.questionNameEnglish = { $regex: search, $options: "i" };
   if (mockTest) obj.mockTest = { $in: [mockTest] };
+  if (customBank) obj.customBank = { $in: [customBank] };
+  if (questionBank) obj.questionBank = { $in: [questionBank] };
+  if (preparationTest) obj.preparationTest = { $in: [preparationTest] };
 
   let questions = await Question.find(obj).populate("subject", "name").exec();
 
@@ -25,12 +31,16 @@ exports.getAllQuestions = catchAsync(async (req, res, next) => {
 
   const timeData = await TestTime.findOne({
     user: userId,
-    mockTest: mockTest,
+    mockTest: mockTest || null,
+    preparationTest: preparationTest || null,
+    questionBank: questionBank || null,
   });
 
   const attemptDetails = await AttemptTest.find({
     userId: userId,
-    mockTest: mockTest,
+    mockTest: mockTest || null,
+    preparationTest: preparationTest || null,
+    questionBank: questionBank || null,
   }).exec();
 
   const allQuestion = questions.map((question) => {
@@ -79,5 +89,6 @@ exports.getAllQuestions = catchAsync(async (req, res, next) => {
     data: allQuestion,
     timeLeft: timeData?.testTime ? timeData?.testTime : 120,
     isReattempt: timeData?.testTime ? true : false,
+    inProgress: attemptDetails.length > 0 ? true : false,
   });
 });

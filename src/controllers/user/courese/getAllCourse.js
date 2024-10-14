@@ -19,6 +19,16 @@ exports.getAllCourse = catchAsync(async (req, res) => {
     filter.isPremium = true;
   }
 
+  const purchasedCourses = await Transaction.find({
+    user: userId,
+    onModel: "Course",
+    orderStatus: "success",
+  }).select("item");
+
+  const purchasedCourseIds = purchasedCourses.map((transaction) => transaction.item);
+
+  filter._id = { $nin: purchasedCourseIds };
+
   let courses;
   if (type === "Popular") {
     courses = await Course.find(filter)
@@ -32,28 +42,12 @@ exports.getAllCourse = catchAsync(async (req, res) => {
     );
   }
 
-  const coursePromises = courses?.map(async (course) => {
-    const transaction = await Transaction.findOne({
-      user: userId,
-      item: course._id,
-      onModel: "Course",
-      orderStatus: "success",
-    });
-
-    return {
-      ...course.toObject(),
-      isPurchased: !!transaction,
-    };
-  });
-
-  const coursesWithPurchaseInfo = await Promise.all(coursePromises);
-
   res.status(200).json({
     status: true,
-    results: coursesWithPurchaseInfo.length,
+    results: courses.length,
     message: "Courses retrieved successfully",
     data: {
-      courses: coursesWithPurchaseInfo,
+      courses,
     },
   });
 });

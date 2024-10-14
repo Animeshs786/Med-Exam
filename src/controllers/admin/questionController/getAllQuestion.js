@@ -10,12 +10,16 @@ exports.getAllQuestions = catchAsync(async (req, res) => {
     page: currentPage,
     limit: currentLimit,
     isMcq,
+    questionBank,
+    preparationTest,
   } = req.query;
   const obj = {};
 
   if (subject) obj.subject = subject;
-  if (search) obj.question = { $regex: search, $options: "i" };
+  if (search) obj.questionNameEnglish = { $regex: search, $options: "i" };
   if (mockTest) obj.mockTest = { $in: [mockTest] };
+  if (questionBank) obj.questionBank = { $in: [questionBank] };
+  if (preparationTest) obj.preparationTest = { $in: [preparationTest] };
   if (isMcq) obj.isMcq = isMcq;
 
   const { limit, skip, totalResult, totalPage } = await pagination(
@@ -29,7 +33,7 @@ exports.getAllQuestions = catchAsync(async (req, res) => {
   const questions = await Question.find(obj)
     .skip(skip)
     .limit(limit)
-    .sort("-createdAt");
+    .sort({ _id: -1 });
 
   res.status(200).json({
     status: true,

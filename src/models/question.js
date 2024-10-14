@@ -49,6 +49,18 @@ const questionSchema = new mongoose.Schema({
       ref: "PreparationTest",
     },
   ],
+  questionBank:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "QuestionBank",
+    }
+  ],
+  customBank:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CustomQueBank",
+    }
+  ],
   questionImageEnglish: {
     type: String,
     default: "",

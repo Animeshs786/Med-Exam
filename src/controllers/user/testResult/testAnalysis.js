@@ -318,7 +318,6 @@
 //   });
 // });
 
-
 const TestResult = require("../../../models/testResult");
 const Question = require("../../../models/question");
 const catchAsync = require("../../../utils/catchAsync");
@@ -336,15 +335,44 @@ exports.getTestAnalysis = catchAsync(async (req, res, next) => {
         populate: { path: "subject", select: "name" },
       },
     })
-    .populate("mockTest", "name");
+    .populate("questionBank", "name")
+    .populate("preparationTest", "name")
+    .populate("mockTest", "name")
+    .populate("customQueBank", "name");
 
   if (!testResult) {
     return next(new AppError("Test result not found", 404));
   }
 
-  let questions = await Question.find({
-    mockTest: testResult.mockTest._id,
-  }).populate("subject", "name");
+  console.log(testResult, "testresult");
+
+  let questions;
+
+  if (testResult?.mockTest?._id) {
+    questions = await Question.find({
+      mockTest: { $in: [testResult?.mockTest?._id] },
+    }).populate("subject", "name");
+  }
+
+  if (testResult?.questionBank?._id) {
+    questions = await Question.find({
+      questionBank: { $in: [testResult?.questionBank?._id] },
+    }).populate("subject", "name");
+  }
+
+  if (testResult?.preparationTest?._id) {
+    questions = await Question.find({
+      preparationTest: { $in: [testResult?.preparationTest?._id] },
+    }).populate("subject", "name");
+  }
+
+  if (testResult?.customQueBank?._id) {
+    questions = await Question.find({
+      customBank: { $in: [testResult?.customQueBank?._id] },
+    }).populate("subject", "name");
+  }
+
+  console.log(questions, "questions");
 
   const difficultyOrder = { Easy: 1, Medium: 2, Hard: 3 };
 
@@ -416,6 +444,9 @@ exports.getTestAnalysis = catchAsync(async (req, res, next) => {
       testResult: {
         user: testResult.user,
         mockTest: testResult.mockTest,
+        preparationTest: testResult.preparationTest,
+        questionBank: testResult.questionBank,
+        customQueBank: testResult.customQueBank,
         totalCorrect: testResult.totalCorrect,
         totalIncorrect: testResult.totalIncorrect,
         totalUnattempted: testResult.totalUnattempted,

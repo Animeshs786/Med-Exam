@@ -6,37 +6,6 @@ const testResultSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  // submittedAnswers: [
-  //   {
-  //     question: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       ref: "Question",
-  //       required: true,
-  //     },
-  //     answer: {
-  //       type: String,
-  //       default: null,
-  //     },
-  //     language: {
-  //       type: String,
-  //       enum: ["English", "Hindi"],
-  //       default: "English",
-  //     },
-  //     type: {
-  //       type: String,
-  //       enum: ["Submit", "Mark"],
-  //       required: true,
-  //     },
-  //     bookmarked: {
-  //       type: Boolean,
-  //       default: false,
-  //     },
-  //     isCorrect: {
-  //       type: Boolean,
-  //       default: false,
-  //     },
-  //   },
-  // ],
   submittedAnswers: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -47,7 +16,18 @@ const testResultSchema = new mongoose.Schema({
   mockTest: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "MockTest",
-    required: true,
+  },
+  customQueBank: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "CustomQueBank",
+  },
+  questionBank: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "QuestionBank",
+  },
+  preparationTest: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "PreparationTest",
   },
   totalCorrect: {
     type: Number,
