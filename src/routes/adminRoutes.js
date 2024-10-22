@@ -194,9 +194,9 @@ const {
 const {
   deleteNoteSubject,
 } = require("../controllers/admin/notesSubject/deleteNoteSubject");
-const {
-  importQuestionsFromDoc,
-} = require("../controllers/admin/questionController/importQuestionFromDoc");
+// const {
+//   importQuestionsFromDoc,
+// } = require("../controllers/admin/questionController/importQuestionFromDoc");
 const {
   importQuestionFromCsv,
 } = require("../controllers/admin/questionController/importQuestionFromCsv");
@@ -208,7 +208,7 @@ const {
   cloneMockTest,
 } = require("../controllers/admin/mockTestController/cloneMockTest");
 const { deleteCourse } = require("../controllers/admin/courese/deleteCourse");
-const { create } = require("../models/admin");
+// const { create } = require("../models/admin");
 const {
   createPreparationTest,
 } = require("../controllers/admin/preparationTestController/createPreparationTest");
