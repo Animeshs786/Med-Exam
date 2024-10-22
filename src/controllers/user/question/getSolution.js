@@ -29,6 +29,8 @@ exports.getSolution = catchAsync(async (req, res, next) => {
     }).sort("-_id");
   }
 
+  console.log(userSubmission, userId, questionId, type, "skdfjlsdf");
+
   if (!userSubmission) {
     return next(new AppError("No answer found for this user.", 404));
   }

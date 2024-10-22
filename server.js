@@ -8,6 +8,7 @@ process.on("uncaughtException", (err) => {
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const http = require("http");
+const cors = require("cors");
 const { Server } = require("socket.io");
 
 const app = require("./src/app");
@@ -31,6 +32,14 @@ const io = new Server(server, {
   },
   pingTimeout: 60000,
 });
+
+// app.use(
+//   cors({
+//     origin: "https://admin.medexamsprep.in", // Allow only your frontend domain
+//     methods: ["GET", "POST"], // Specify allowed methods
+//     credentials: true, // Allow cookies if needed
+//   })
+// );
 
 const users = {};
 

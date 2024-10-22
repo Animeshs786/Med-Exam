@@ -276,6 +276,7 @@ const {
 const {
   removeQuestionFromQuestionBank,
 } = require("../controllers/admin/questionBank/removeQuestionFromQuestionBank");
+const { getDashboard } = require("../controllers/admin/dashboard/getDashboard");
 
 const router = express.Router();
 
@@ -760,5 +761,7 @@ router.delete(
   "/removeQuestionFromQuestionBank",
   removeQuestionFromQuestionBank
 );
+
+router.get("/dashboard", getDashboard);
 
 module.exports = router;

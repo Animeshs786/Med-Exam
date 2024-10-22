@@ -108,8 +108,12 @@ exports.submitTest = catchAsync(async (req, res, next) => {
     })
   );
 
+  console.log(+modifyTotalTime, submittedAnswers.length, totalCorrect, "sldfj");
+
   const accuracy = (totalCorrect / submittedAnswers.length) * 100;
-  const speed = totalCorrect / (+modifyTotalTime / 60);
+  // const speed = totalCorrect / (Number(modifyTotalTime) / 60);
+  const speed = +modifyTotalTime > 0 ? totalCorrect / +modifyTotalTime : 0;
+  console.log(accuracy, speed, "accuracy, speed");
 
   const testResult = await TestResult.create({
     user: userId,
@@ -117,7 +121,7 @@ exports.submitTest = catchAsync(async (req, res, next) => {
     preparationTest: preparationTestId || null,
     questionBank: questionBankId || null,
     customQueBank: customQueBankId || null,
-    submittedAnswers: answerResults.filter((result) => result !== null), 
+    submittedAnswers: answerResults.filter((result) => result !== null),
     totalCorrect,
     totalIncorrect,
     totalUnattempted: testModule?.totalQuestions - totalAttempted,
