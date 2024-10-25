@@ -277,6 +277,11 @@ const {
   removeQuestionFromQuestionBank,
 } = require("../controllers/admin/questionBank/removeQuestionFromQuestionBank");
 const { getDashboard } = require("../controllers/admin/dashboard/getDashboard");
+const { createEBook } = require("../controllers/admin/eBook/createEBook");
+const { getAllEBooks } = require("../controllers/admin/eBook/getAllEbook");
+const { getEBooks } = require("../controllers/admin/eBook/getEBook");
+const { updateEBook } = require("../controllers/admin/eBook/updateEBook");
+const { deleteEBook } = require("../controllers/admin/eBook/deleteEBook");
 
 const router = express.Router();
 
@@ -763,5 +768,36 @@ router.delete(
 );
 
 router.get("/dashboard", getDashboard);
+
+//EBook
+
+router
+  .route("/eBook")
+  .post(
+    fileUploader(
+      [
+        { name: "coverImage", maxCount: 1 },
+        { name: "file", maxCount: 1 },
+      ],
+      "eBook"
+    ),
+    createEBook
+  )
+  .get(getAllEBooks);
+
+router
+  .route("/eBook/:id")
+  .get(getEBooks)
+  .patch(
+    fileUploader(
+      [
+        { name: "coverImage", maxCount: 1 },
+        { name: "file", maxCount: 1 },
+      ],
+      "eBook"
+    ),
+    updateEBook
+  )
+  .delete(deleteEBook);
 
 module.exports = router;

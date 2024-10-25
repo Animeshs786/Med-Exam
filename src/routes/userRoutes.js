@@ -190,6 +190,8 @@ const {
 const {
   deleteCustomBank,
 } = require("../controllers/user/customBank/deleteQuestionBank");
+const { getAllEBook } = require("../controllers/user/eBook/getAllEBook");
+const { getEBooks } = require("../controllers/user/eBook/getEBook");
 
 const router = express.Router();
 
@@ -371,5 +373,10 @@ router
   .route("/customBank/:id")
   .get(userAuthenticate, getCustomBank)
   .delete(userAuthenticate, deleteCustomBank);
+
+
+//E Book
+router.get("/eBook", userAuthenticate, getAllEBook);
+router.get("/eBook/:id", userAuthenticate, getEBooks);
 
 module.exports = router;
