@@ -282,6 +282,9 @@ const { getAllEBooks } = require("../controllers/admin/eBook/getAllEbook");
 const { getEBooks } = require("../controllers/admin/eBook/getEBook");
 const { updateEBook } = require("../controllers/admin/eBook/updateEBook");
 const { deleteEBook } = require("../controllers/admin/eBook/deleteEBook");
+const {
+  labValueFile,
+} = require("../controllers/admin/homeController/labValueFile");
 
 const router = express.Router();
 
@@ -639,6 +642,7 @@ router
       [
         { name: "thumbImage", maxCount: 1 },
         { name: "bannerImage", maxCount: 1 },
+        { name: "previewImage", maxCount: 1 },
       ],
       "notes"
     ),
@@ -654,6 +658,7 @@ router
       [
         { name: "thumbImage", maxCount: 1 },
         { name: "bannerImage", maxCount: 1 },
+        { name: "previewImage", maxCount: 1 },
       ],
       "notes"
     ),
@@ -799,5 +804,11 @@ router
     updateEBook
   )
   .delete(deleteEBook);
+
+router.post(
+  "/labValueFile",
+  fileUploader([{ name: "labValueFile", maxCount: 1 }], "labValue"),
+  labValueFile
+);
 
 module.exports = router;

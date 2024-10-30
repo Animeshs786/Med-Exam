@@ -46,6 +46,10 @@ const notesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    previewImage: {
+      type: String,
+      default: "",
+    },
     course: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",

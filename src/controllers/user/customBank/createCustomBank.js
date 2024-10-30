@@ -5,7 +5,13 @@ const CustomQueBank = require("../../../models/customQueBank");
 
 exports.createCustomBank = catchAsync(async (req, res) => {
   try {
-    const { name, totalQuestions, difficulty, subjectId, testType } = req.body;
+    const {
+      name = "Custom Bank Test",
+      totalQuestions,
+      difficulty,
+      subjectId,
+      testType,
+    } = req.body;
     const userId = req.user.id;
     const subjectObjectIds = subjectId.map(
       (id) => new mongoose.Types.ObjectId(id)
@@ -21,7 +27,7 @@ exports.createCustomBank = catchAsync(async (req, res) => {
 
     const questions = await Question.aggregate([
       { $match: query },
-      { $sample: { size: +totalQuestions } }, 
+      { $sample: { size: +totalQuestions } },
     ]);
 
     // If not enough questions found

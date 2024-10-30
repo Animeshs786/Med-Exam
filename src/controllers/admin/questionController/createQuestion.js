@@ -15,7 +15,7 @@ exports.createQuestion = catchAsync(async (req, res) => {
     questionBank,
     difficulty,
     solutionDetailEnglish,
-    solutionDetailHindi,
+    solutionDetailHind,
   } = req.body;
 
   const obj = {
@@ -34,7 +34,7 @@ exports.createQuestion = catchAsync(async (req, res) => {
   if (correctAnswerEnglish) obj.correctAnswerEnglish = correctAnswerEnglish;
   if (correctAnswerHindi) obj.correctAnswerHindi = correctAnswerHindi;
   if (solutionDetailEnglish) obj.solutionDetailEnglish = solutionDetailEnglish;
-  if (solutionDetailHindi) obj.solutionDetailHindi = solutionDetailHindi;
+  if (solutionDetailHind) obj.solutionDetailHind = solutionDetailHind;
 
   if (optionsEnglish) {
     const optionsEnglishParse = JSON.parse(optionsEnglish);

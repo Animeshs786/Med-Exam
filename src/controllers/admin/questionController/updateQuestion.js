@@ -18,7 +18,7 @@ exports.updateQuestion = catchAsync(async (req, res, next) => {
     questionBank,
     difficulty,
     solutionDetailEnglish,
-    solutionDetailHindi,
+    solutionDetailHind,
   } = req.body;
 
   let updateData = {};
@@ -36,7 +36,7 @@ exports.updateQuestion = catchAsync(async (req, res, next) => {
   if (correctAnswerHindi) updateData.correctAnswerHindi = correctAnswerHindi;
   if (solutionDetailEnglish)
     updateData.solutionDetailEnglish = solutionDetailEnglish;
-  if (solutionDetailHindi) updateData.solutionDetailHindi = solutionDetailHindi;
+  if (solutionDetailHind) updateData.solutionDetailHind = solutionDetailHind;
 
   if (optionsEnglish) {
     const optionsEnglishParse = JSON.parse(optionsEnglish);
@@ -53,7 +53,6 @@ exports.updateQuestion = catchAsync(async (req, res, next) => {
   if (difficulty) updateData.difficulty = difficulty;
   if (preparationTest) updateData.preparationTest = preparationTest;
   if (questionBank) updateData.questionBank = questionBank;
-  
 
   const optionImageEnglish = existingQuestion.optionImageEnglish || [];
   const optionImageHindi = existingQuestion.optionImageHindi || [];

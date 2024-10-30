@@ -89,7 +89,7 @@ const {
 const {
   getAllMyPurchases,
 } = require("../controllers/user/myContent/getAllMyPurchases");
-const { bookmarkClass } = require("../controllers/user/bookmark/bookmarkClass");
+const { bookmark } = require("../controllers/user/bookmark/bookmark");
 const {
   getCourseSubject,
 } = require("../controllers/user/courese/getCourseSubject");
@@ -192,6 +192,10 @@ const {
 } = require("../controllers/user/customBank/deleteQuestionBank");
 const { getAllEBook } = require("../controllers/user/eBook/getAllEBook");
 const { getEBooks } = require("../controllers/user/eBook/getEBook");
+const { getLabFile } = require("../controllers/user/home/getLabFile");
+const {
+  getAllBookmarks,
+} = require("../controllers/user/bookmark/getAllBookmark");
 
 const router = express.Router();
 
@@ -298,7 +302,7 @@ router.get("/myContent/testSeries", userAuthenticate, getPurchaseTestSeries);
 router.get("/myContent/myPurchases", userAuthenticate, getAllMyPurchases);
 
 //Bookmark Class
-router.post("/bookmarkClass", userAuthenticate, bookmarkClass);
+router.post("/bookmark", userAuthenticate, bookmark);
 
 //Class
 router.get("/class", userAuthenticate, getAllLiveClass);
@@ -374,9 +378,11 @@ router
   .get(userAuthenticate, getCustomBank)
   .delete(userAuthenticate, deleteCustomBank);
 
-
 //E Book
 router.get("/eBook", userAuthenticate, getAllEBook);
 router.get("/eBook/:id", userAuthenticate, getEBooks);
 
+router.get("/labFile", getLabFile);
+
+router.get("/userBookmark", userAuthenticate, getAllBookmarks);
 module.exports = router;

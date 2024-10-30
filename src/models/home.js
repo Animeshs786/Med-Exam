@@ -32,6 +32,10 @@ const homeSchema = new mongoose.Schema({
       answer: String,
     },
   ],
+  labValueFile: {
+    type: String,
+    default: "",
+  },
   createdAt: {
     type: Date,
     default: Date.now,

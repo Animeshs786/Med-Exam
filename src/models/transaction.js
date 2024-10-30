@@ -18,7 +18,7 @@ const transactionScheama = new mongoose.Schema({
       message: " Value not supported.",
     },
   },
-  price: { 
+  price: {
     type: Number,
     default: 0,
   },
@@ -29,6 +29,9 @@ const transactionScheama = new mongoose.Schema({
     default: "pending",
   },
   createAt: { type: Date, default: Date.now },
+  expiryAt: {
+    type: Date,
+  },
 });
 
 const Transaction = mongoose.model("Transaction", transactionScheama);

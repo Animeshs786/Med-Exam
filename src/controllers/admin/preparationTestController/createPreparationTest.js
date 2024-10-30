@@ -39,13 +39,11 @@ exports.createPreparationTest = catchAsync(async (req, res, next) => {
   }
 
   if (testType == "Chapter Test") {
-    if (subjects || subject)
+    if (subjects)
       return next(
-        new AppError(
-          "In chapter test subjects or subject are not required",
-          400
-        )
+        new AppError("In Chapter test subjects are not required", 400)
       );
+    if (!subject) return next(new AppError("Please select subject", 400));
   }
   if (req.files?.thumbImage) {
     thumbImage = `${req.files.thumbImage[0].destination}/${req.files.thumbImage[0].filename}`;

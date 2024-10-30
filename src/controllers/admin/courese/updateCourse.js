@@ -33,6 +33,7 @@ exports.updateCourse = catchAsync(async (req, res, next) => {
       name,
       price,
       exam,
+      subjects,
       rating,
       ratingNumber,
       purchasedNumber,
@@ -64,6 +65,7 @@ exports.updateCourse = catchAsync(async (req, res, next) => {
     if (isTestSeries) courseData.isTestSeries = isTestSeries;
 
     if (exam) courseData.exam = JSON.parse(exam);
+    if (subjects) courseData.subjects = JSON.parse(subjects);
 
     const existingCourse = await Course.findById(id);
     if (!existingCourse) {

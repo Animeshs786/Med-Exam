@@ -6,14 +6,22 @@ const bookmarkSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  class: {
+  item: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Class",
     required: true,
+    refPath: "onModel",
   },
-  status:{
-    type:Boolean,
-    default:true,
+  onModel: {
+    type: String,
+    required: true,
+    enum: {
+      values: ["Note", "Question", "Class"],
+      message: " Value not supported.",
+    },
+  },
+  status: {
+    type: Boolean,
+    default: true,
   },
   createdAt: {
     type: Date,

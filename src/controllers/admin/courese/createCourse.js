@@ -43,6 +43,7 @@ exports.createCourse = catchAsync(async (req, res, next) => {
       isPdf,
       isTestSeries,
       isPreparationtest,
+      subjects,
     } = req.body;
 
     const courseData = {
@@ -60,6 +61,8 @@ exports.createCourse = catchAsync(async (req, res, next) => {
       isPreparationtest,
     };
 
+    console.log(req.body, res.files, "test");
+
     if (!slug) {
       return next(new AppError("Slug is required", 400));
     }
@@ -76,6 +79,7 @@ exports.createCourse = catchAsync(async (req, res, next) => {
 
     if (slug) courseData.slug = slug;
     if (exam) courseData.exam = JSON.parse(exam);
+    if (subjects) courseData.subjects = JSON.parse(subjects);
 
     if (thumbImage) {
       courseData.thumbImage = thumbImage;

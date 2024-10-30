@@ -23,9 +23,12 @@ exports.getAllCourse = catchAsync(async (req, res) => {
     user: userId,
     onModel: "Course",
     orderStatus: "success",
+    expiryAt: { $gt: new Date() },
   }).select("item");
 
-  const purchasedCourseIds = purchasedCourses.map((transaction) => transaction.item);
+  const purchasedCourseIds = purchasedCourses.map(
+    (transaction) => transaction.item
+  );
 
   filter._id = { $nin: purchasedCourseIds };
 

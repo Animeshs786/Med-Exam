@@ -12,6 +12,7 @@ exports.updateNote = catchAsync(async (req, res, next) => {
 
   let thumbImage;
   let bannerImage;
+  let previewImage;
 
   if (req.files && req.files?.thumbImage) {
     thumbImage = `${req.files.thumbImage[0].destination}/${req.files.thumbImage[0].filename}`;
@@ -30,7 +31,16 @@ exports.updateNote = catchAsync(async (req, res, next) => {
     }
   }
 
-  const { name, exam, subHeading,detail,description,course } = req.body;
+  if (req.files && req.files?.previewImage) {
+    previewImage = `${req.files.previewImage[0].destination}/${req.files.previewImage[0].filename}`;
+    if (note.previewImage) {
+      await deleteOldFiles(note.previewImage).catch((err) =>
+        console.error("Failed to delete banner image", err)
+      );
+    }
+  }
+
+  const { name, exam, subHeading, detail, description, course } = req.body;
   const updatedData = {};
 
   if (name) updatedData.name = name;
@@ -38,6 +48,7 @@ exports.updateNote = catchAsync(async (req, res, next) => {
   if (detail) updatedData.detail = JSON.parse(detail);
   if (thumbImage) updatedData.thumbImage = thumbImage;
   if (bannerImage) updatedData.bannerImage = bannerImage;
+  if (previewImage) updatedData.previewImage = previewImage;
   if (description) updatedData.description = description;
   if (subHeading) updatedData.subHeading = subHeading;
   if (course) updatedData.course = course;

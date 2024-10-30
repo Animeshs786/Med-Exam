@@ -28,6 +28,12 @@ const courseSchema = new mongoose.Schema(
         ref: "Exam",
       },
     ],
+    subjects: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Subject",
+      },
+    ],
     rating: {
       type: Number,
       default: 0,
@@ -81,6 +87,10 @@ const courseSchema = new mongoose.Schema(
     logo: {
       type: String,
       default: "",
+    },
+    expiry: {
+      type: Number, //expiry in daysa
+      default: 365,
     },
     createdAt: {
       type: Date,
